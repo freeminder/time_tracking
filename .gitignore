@@ -1,0 +1,17 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+
+# use local_env.yml instead (you must duplicate and adjust it)
+# /config/database.yml
+/config/local_env.yml
+/config/secrets.yml
+
+/public/assets/
+
+/.ruby-gemset
+/.ruby-version
+
