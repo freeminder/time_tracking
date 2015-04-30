@@ -1,0 +1,40 @@
+.container
+	.row
+		.col-md-8
+			%p.lead Edit my profile
+	.row
+		= simple_form_for @user do |f|
+			.col-md-6
+				= f.error_notification
+
+				.form-group
+					= f.input :fullname, input_html: {class: 'form-control'}
+					= f.input :birth, input_html: {class: 'form-control'}
+				.form-group
+					%i Select from first list with autocomplete, it fills the real second one.
+					%br/
+					Not handy for you, but handy for developers.
+					%br/
+					Primary zip
+					= text_field_tag :zip_code, nil, class: "zip-autocomplete form-control", data: {target: 'zip1'}
+					= f.input :zip1, input_html: {id: "zip1", class: 'form-control'}, label: '(system one, fill in below)'
+					%br/
+					Secondary zip
+					= text_field_tag :zip_code2, nil, class: "zip-autocomplete form-control", data: {target: 'zip2'}
+					= f.input :zip2, input_html: {id: "zip2", class: 'form-control'}, label: '(system one, fill in below)'
+				%hr
+				Autocomplete field
+				= text_field_tag :school, nil, :id => "school-autocomplete", class: 'form-control'
+				= f.input :school_id, input_html: {id: 'school', class: 'form-control'}, label: 'school ID: (use autocomplete below)'
+				%p.lead#school-selected
+			.col-md-6
+				= image_tag @user.avatar, class: 'img-circle'
+				= f.input :avatar, input_html: {class: 'form-control'}, label: 'Profile picture'
+				.form-group
+					= f.input :pause, label: "I'm on a break"
+				.form-group
+					= f.submit 'Save', class: 'btn btn-success'
+	- unless @user.errors.empty?
+		.row
+			.col-md-12
+				%pre= @user.errors.full_messages.join "\n"

@@ -1,0 +1,15 @@
+.container
+	.row
+		.col-md-8	
+			%p.lead= "User #{current_user.email}"
+			= link_to 'Show his stuff', user_uploads_path(current_user)
+			%hr
+			= "Member since #{l current_user.created_at.to_date, format: :short}"
+			%hr
+			= link_to 'Show his swap history', user_history_path(current_user)
+			%hr
+			= link_to 'Show his friends', user_friendships_path(current_user)
+			%hr
+			= link_to 'Go back', :back, class: 'btn btn-primary'
+		.col-md-4
+			= image_tag current_user.avatar, class: 'img-circle'
