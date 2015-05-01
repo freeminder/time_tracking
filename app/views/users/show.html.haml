@@ -1,0 +1,15 @@
+.container
+	.row
+		.col-md-8	
+			%p.lead= "#{@user.first_name} #{@user.last_name} (#{@user.email})"
+			%hr
+			= "Member since #{l @user.created_at.to_date, format: :short}"
+			%hr
+			= "Member of "
+			= link_to @user.team.name, team_path(@user.team) if @user.team
+			= "no one" if @user.team == nil
+			= " team"
+			%hr
+			= link_to 'Go back', :back, class: 'btn btn-primary'
+			= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger'
+			= link_to 'Edit', "/users/#{@user.id}/edit", class: 'btn btn-success'

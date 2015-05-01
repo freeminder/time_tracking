@@ -1,0 +1,13 @@
+%h2 Teams
+%table.table
+	%tr
+		%th Team
+		%th Users
+	- @teams.each do |team|
+		%tr
+			%td= link_to team.name, "/teams/#{team.id}"
+			%td
+				- @users.each do |user|
+					= link_to user.email, "/users/#{user.id}" if user.team_id == team.id
+%hr
+= link_to 'Go back', :back, class: 'btn btn-primary'

@@ -1,15 +1,20 @@
 Rails.application.routes.draw do
-  # get 'report/index'
-  resources :application
+  root 'application#index'
+  get 'application/index'
   resources :report
+  resources :teams
 
 
   devise_for :users
+  get 'users/index'
+  get 'users/:id' => 'users#show'
+  get 'users/:id/edit' => 'users#edit'
+  post 'users/:id/update' => 'users#update'
+  get 'users/:id/destroy' => 'users#destroy'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'application#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

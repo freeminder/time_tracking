@@ -1,0 +1,16 @@
+.container
+	.row
+		.col-md-8	
+			%p.lead= "Edit profile"
+			%hr
+			= form_tag "/users/#{@user.id}/update" do
+				= field_set_tag do
+					= label_tag :first_name, 'First Name:'
+					= text_field_tag :first_name
+					%hr
+					= label_tag :last_name, 'Last Name:'
+					= text_field_tag :last_name
+					%hr
+					= link_to 'Go back', :back, class: 'btn btn-primary'
+					= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger'
+					= submit_tag 'Update', class: 'btn btn-success'

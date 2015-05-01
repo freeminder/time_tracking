@@ -1,0 +1,17 @@
+%h3 Users
+%table.table
+	%tr
+		%th Email
+		%th First Name
+		%th Last Name
+		%th Team
+		%th Admin
+	- @users.each do |user|
+		%tr
+			%td= link_to user.email, "/users/#{user.id}"
+			%td= user.first_name
+			%td= user.last_name
+			%td= user.team ? user.team.name : 'No team assigned'
+			%td= user.admin?
+%hr
+= link_to 'Go back', :back, class: 'btn btn-primary'
