@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
   root 'application#index'
   get 'application/index'
-  resources :report
-  resources :teams
+  resources :reports
+  resources :categories
+  get 'categories/:id/destroy' => 'categories#destroy'
 
+  resources :teams
+  get 'teams/:id/destroy' => 'teams#destroy'
 
   devise_for :users
-  get 'users/index'
-  get 'users/:id' => 'users#show'
-  get 'users/:id/edit' => 'users#edit'
-  post 'users/:id/update' => 'users#update'
+  resources :users
   get 'users/:id/destroy' => 'users#destroy'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

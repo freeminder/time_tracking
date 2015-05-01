@@ -1,9 +1,13 @@
-%h3= @current_team.name
-%table.table
-	%tr
-		%th= "Members of #{@current_team.name} team: "
-		%td
-			- @users.each do |user|
-				= link_to "#{user.email}", "/users/#{user.id}" if user.team_id == @team_id
-%hr
-= link_to 'Go back', :back, class: 'btn btn-primary'
+.container
+	.row
+		.col-md-4
+			%p.lead= "Members of #{@team.name} team: "
+			%hr
+			%div{:align => "right"}
+				- @users.each do |user|
+					= link_to "#{user.first_name} #{user.last_name} (#{user.email})", "/users/#{user.id}" if user.team_id == @team_id
+					%br/
+				%hr
+				= link_to 'Go back', :back, class: 'btn btn-primary'
+				= link_to 'Delete', "/teams/#{@team.id}/destroy", class: 'btn btn-danger'
+				= link_to 'Edit', edit_team_path, class: 'btn btn-success'

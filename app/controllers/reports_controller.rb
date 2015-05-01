@@ -1,7 +1,7 @@
-class TeamsController < ApplicationController
+class ReportsController < ApplicationController
 
   def index
-    @teams = Team.all
+    @reports = Report.all
     @users = User.all
   end
 
