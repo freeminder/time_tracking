@@ -21,7 +21,7 @@
 								= menu_link 'Users', users_path
 								= menu_link 'Teams', teams_path
 								= menu_link 'Categories', categories_path
-							= menu_link 'Reports', report_path(current_user)
+							= menu_link 'Reports', reports_path
 							= menu_link 'Log out', destroy_user_session_path, false, method: :delete
 							%li
 								= menu_link "Logged in as #{current_user.email}", "/users/#{current_user.id}"

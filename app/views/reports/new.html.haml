@@ -1,0 +1,18 @@
+.container
+  .row
+    .col-md-4
+      %p.lead= "Add report"
+      %hr
+      = simple_form_for @report do |f|
+        = f.error_notification
+        .form-group
+          -# = f.input :name, label_html: { class: 'my_class' }
+          -# = f.hidden_field :user_id, value: current_user.id
+          = f.input :day, collection: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], prompt: "Select day of the week"
+          = f.input :categories_id, collection: @categories, prompt: "Select category"
+          -# = f.association :categories
+          = f.input :hours, collection: 1..10, prompt: "Select number of hours"
+        .form-actions
+          %div{:align => "right"}
+            = link_to 'Go back', :back, class: 'btn btn-primary'
+            = f.button :submit, "Create", class: 'btn btn-success'

@@ -1,97 +1,16 @@
-%center
-  %h2
-    %b Reports
-
-
-:css
-  .tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}
-  .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
-  .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
-  .tg .tg-0rnh{background-color:#D2E4FC;font-weight:bold;text-align:center}
-  .tg .tg-0ord{text-align:right}
-  .tg .tg-ifyx{background-color:#D2E4FC;text-align:right}
-  .tg .tg-vn4c{background-color:#D2E4FC} 
-  .tg .tg-e3zv{font-weight:bold}
-  .tg .tg-vv7f{background-color:#D2E4FC;font-weight:bold}
-  .tg .tg-hgcj{font-weight:bold;text-align:center}
-%table.tg{:style => "undefined;table-layout: fixed; width: 1068px"}
-  %colgroup
-    %col{:style => "width: 294px"}
-      %col{:style => "width: 100px"}
-        %col{:style => "width: 100px"}
-          %col{:style => "width: 100px"}
-            %col{:style => "width: 100px"}
-              %col{:style => "width: 100px"}
-                %col{:style => "width: 100px"}
-                  %col{:style => "width: 100px"}
-                    %col{:style => "width: 100px"}
-                      %col{:style => "width: 100px"}
-  %tr
-    %th.tg-0ord Associate Name:
-    %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-  %tr
-    %td.tg-vn4c
-    %td.tg-vn4c
-    %td.tg-0rnh{:colspan => "8"} For Week Starting Monday #{Date.today.beginning_of_week.strftime('%d/%m/%Y')} Through Sunday #{Date.today.end_of_week.strftime('%d/%m/%Y')}
-  %tr
-    %td.tg-e3zv Description
-    %td.tg-031e
-    %td.tg-hgcj MONDAY
-    %td.tg-hgcj TUESDAY
-    %td.tg-hgcj WEDNESDAY
-    %td.tg-hgcj THURSDAY
-    %td.tg-hgcj FRIDAY
-    %td.tg-hgcj SATURDAY
-    %td.tg-hgcj SUNDAY
-    %td.tg-hgcj TOTAL
-  - @categories.each do |category|
-    %tr
-      %td.tg-031e= category.name
-      %td.tg-031e
-      %td.tg-031e
-        %input.form-control{:name => "MONDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "TUESDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "WEDNESDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "THURSDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "FRIDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "SATURDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "SUNDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-  %tr
-    %td.tg-vn4c Signature
-    %td.tg-vn4c Days Total:
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-  %tr
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
+.container
+  .row
+    .col-md-4
+      %p.lead= "Report for #{@report.day}"
+      %hr
       %div{:align => "right"}
-        %input{:type => "submit", :value => "Save", :class => "btn btn-success"}
-
+        = "Hours: #{@report.hours}"
+        %br/
+        = "Category: #{@category.name}"
+        %br/
+        = "Created at: #{@report.created_at}"
+        %br/
+        %hr
+        = link_to 'Go back', :back, class: 'btn btn-primary'
+        = link_to 'Delete', "/reports/#{@report.id}/destroy", class: 'btn btn-danger'
+        = link_to 'Edit', edit_report_path, class: 'btn btn-success'

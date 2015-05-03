@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150430192214) do
+ActiveRecord::Schema.define(version: 20150503205921) do
 
   create_table "categories", force: :cascade do |t|
     t.string  "name",       limit: 255
@@ -20,12 +20,26 @@ ActiveRecord::Schema.define(version: 20150430192214) do
 
   add_index "categories", ["reports_id"], name: "index_categories_on_reports_id", using: :btree
 
+  create_table "categories_reports", id: false, force: :cascade do |t|
+    t.integer "category_id", limit: 4, null: false
+    t.integer "report_id",   limit: 4, null: false
+  end
+
+  add_index "categories_reports", ["category_id", "report_id"], name: "index_categories_reports_on_category_id_and_report_id", using: :btree
+  add_index "categories_reports", ["report_id", "category_id"], name: "index_categories_reports_on_report_id_and_category_id", using: :btree
+
   create_table "reports", force: :cascade do |t|
-    t.string  "name",          limit: 255
-    t.integer "categories_id", limit: 4
+    t.string   "name",          limit: 255
+    t.integer  "categories_id", limit: 4
+    t.string   "day",           limit: 255
+    t.integer  "hours",         limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id",       limit: 4
   end
 
   add_index "reports", ["categories_id"], name: "index_reports_on_categories_id", using: :btree
+  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "teams", force: :cascade do |t|
     t.string "name", limit: 255, default: "1"

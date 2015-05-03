@@ -1,23 +1,23 @@
-%center
-  %h2
-    %b Reports
+.container
+  %center
+    %h2
+      %b Reports
 
 
-:css
-  .tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}
-  .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
-  .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
-  .tg .tg-0rnh{background-color:#D2E4FC;font-weight:bold;text-align:center}
-  .tg .tg-0ord{text-align:right}
-  .tg .tg-ifyx{background-color:#D2E4FC;text-align:right}
-  .tg .tg-vn4c{background-color:#D2E4FC} 
-  .tg .tg-e3zv{font-weight:bold}
-  .tg .tg-vv7f{background-color:#D2E4FC;font-weight:bold}
-  .tg .tg-hgcj{font-weight:bold;text-align:center}
-%table.tg{:style => "undefined;table-layout: fixed; width: 1068px"}
-  %colgroup
-    %col{:style => "width: 294px"}
-      %col{:style => "width: 100px"}
+  :css
+    .tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
+    .tg .tg-0rnh{background-color:#D2E4FC;font-weight:bold;text-align:center}
+    .tg .tg-0ord{text-align:right}
+    .tg .tg-ifyx{background-color:#D2E4FC;text-align:right}
+    .tg .tg-vn4c{background-color:#D2E4FC} 
+    .tg .tg-e3zv{font-weight:bold}
+    .tg .tg-vv7f{background-color:#D2E4FC;font-weight:bold;text-align:center}
+    .tg .tg-hgcj{font-weight:bold;text-align:center}
+  %table.tg{:style => "undefined;table-layout: fixed; width: 1068px"}
+    %colgroup
+      %col{:style => "width: 294px"}
         %col{:style => "width: 100px"}
           %col{:style => "width: 100px"}
             %col{:style => "width: 100px"}
@@ -26,72 +26,93 @@
                   %col{:style => "width: 100px"}
                     %col{:style => "width: 100px"}
                       %col{:style => "width: 100px"}
-  %tr
-    %th.tg-0ord Associate Name:
-    %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-  %tr
-    %td.tg-vn4c
-    %td.tg-vn4c
-    %td.tg-0rnh{:colspan => "8"} For Week Starting Monday #{Date.today.beginning_of_week.strftime('%d/%m/%Y')} Through Sunday #{Date.today.end_of_week.strftime('%d/%m/%Y')}
-  %tr
-    %td.tg-e3zv Description
-    %td.tg-031e
-    %td.tg-hgcj MONDAY
-    %td.tg-hgcj TUESDAY
-    %td.tg-hgcj WEDNESDAY
-    %td.tg-hgcj THURSDAY
-    %td.tg-hgcj FRIDAY
-    %td.tg-hgcj SATURDAY
-    %td.tg-hgcj SUNDAY
-    %td.tg-hgcj TOTAL
-  - @categories.each do |category|
+                        %col{:style => "width: 70px"}
     %tr
-      %td.tg-031e= category.name
+      %th.tg-0ord Associate Name:
+      %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+    %tr
+      %td.tg-vn4c
+      %td.tg-vn4c
+      %td.tg-0rnh{:colspan => "8"} For Week Starting Monday #{Date.today.beginning_of_week.strftime('%d/%m/%Y')} Through Sunday #{Date.today.end_of_week.strftime('%d/%m/%Y')}
+    %tr{:align => "center"}
+      %td.tg-e3zv Description
       %td.tg-031e
-      %td.tg-031e
-        %input.form-control{:name => "MONDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "TUESDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "WEDNESDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "THURSDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "FRIDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "SATURDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-        %input.form-control{:name => "SUNDAY_#{category.name}", :type => "number"}/
-      %td.tg-031e
-  %tr
-    %td.tg-vn4c Signature
-    %td.tg-vn4c Days Total:
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-    %td.tg-vv7f
-  %tr
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-    %th.tg-031e
-      %div{:align => "right"}
-        %input{:type => "submit", :value => "Send", :class => "btn btn-success"}
+      %td.tg-hgcj MONDAY
+      %td.tg-hgcj TUESDAY
+      %td.tg-hgcj WEDNESDAY
+      %td.tg-hgcj THURSDAY
+      %td.tg-hgcj FRIDAY
+      %td.tg-hgcj SATURDAY
+      %td.tg-hgcj SUNDAY
+      %td.tg-hgcj TOTAL
+    - @categories.each do |category|
+      - @hours = Hash["Monday" => 0, "Tuesday" => 0, "Wednesday" => 0, "Thursday" => 0, "Friday" => 0, "Saturday" => 0, "Sunday" => 0]
+      %tr
+        %td.tg-031e= category.name
+        %td.tg-031e
+        %td.tg-031e{:align => "center"}
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Monday", category.id, current_user.id)
+          = @hours["Monday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
+          - @total["hours"] += @hours["Monday"]
+          - @total["Monday_hours"] += @hours["Monday"]
+        %td.tg-031e{:align => "center"}
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Tuesday", category.id, current_user.id)
+          = @hours["Tuesday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
+          - @total["hours"] += @hours["Tuesday"]
+          - @total["Tuesday_hours"] += @hours["Tuesday"]
+        %td.tg-031e{:align => "center"}
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Wednesday", category.id, current_user.id)
+          = @hours["Wednesday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
+          - @total["hours"] += @hours["Wednesday"]
+          - @total["Wednesday_hours"] += @hours["Wednesday"]
+        %td.tg-031e{:align => "center"}
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Thursday", category.id, current_user.id)
+          = @hours["Thursday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
+          - @total["hours"] += @hours["Thursday"]
+          - @total["Thursday_hours"] += @hours["Thursday"]
+        %td.tg-031e{:align => "center"}
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Friday", category.id, current_user.id)
+          = @hours["Friday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
+          - @total["hours"] += @hours["Friday"]
+          - @total["Friday_hours"] += @hours["Friday"]
+        %td.tg-031e{:align => "center"}
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Saturday", category.id, current_user.id)
+          = @hours["Saturday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
+          - @total["hours"] += @hours["Saturday"]
+          - @total["Saturday_hours"] += @hours["Saturday"]
+        %td.tg-031e{:align => "center"}
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Sunday", category.id, current_user.id)
+          = @hours["Sunday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
+          - @total["hours"] += @hours["Sunday"]
+          - @total["Sunday_hours"] += @hours["Sunday"]
+        %td.tg-031e{:align => "center"}
+          %b= @hours["Monday"] + @hours["Tuesday"] + @hours["Wednesday"] + @hours["Thursday"] + @hours["Friday"] + @hours["Saturday"] + @hours["Sunday"]
+        - @reports.each do |report|
+          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", report.day, report.categories_id, current_user.id)
+          - @days.push(report.day) if @report.where(:categories_id => category.id).first != nil
+    %tr
+      %td.tg-vn4c
+        %b Signature
+      %td.tg-vn4c
+        %b= "Days Total: #{@days.uniq.size}"
+      %td.tg-vv7f= @total["Monday_hours"]
+      %td.tg-vv7f= @total["Tuesday_hours"]
+      %td.tg-vv7f= @total["Wednesday_hours"]
+      %td.tg-vv7f= @total["Thursday_hours"]
+      %td.tg-vv7f= @total["Friday_hours"]
+      %td.tg-vv7f= @total["Saturday_hours"]
+      %td.tg-vv7f= @total["Sunday_hours"]
+      %td.tg-vv7f{:align => "center"}= @total["hours"]
+  %div{:align => "right"}
+    %hr
+      = link_to 'Go back', :back, class: 'btn btn-primary'
+      = link_to 'Export', "#", class: 'btn btn-success'
+      = link_to 'Add report', new_report_path, class: 'btn btn-success'
 
