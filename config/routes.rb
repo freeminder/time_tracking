@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   root 'application#index'
   get 'application/index'
+
   resources :reports
   get 'reports/:id/destroy' => 'reports#destroy'
+
   resources :categories
   get 'categories/:id/destroy' => 'categories#destroy'
 

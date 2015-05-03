@@ -11,10 +11,8 @@
 					= f.input :last_name, label_html: { class: 'my_class' }
 					= f.input :password, hint: false, error_html: { id: 'password_error'}
 					= f.input :password_confirmation, label: false
-					/ = f.input :team_id, collection: @teams, :value_method => "id"
+					= f.input :team_id, :as => :select, collection: @teams, prompt: "Select team"
 					%div{:align => "right"}
-						= f.input :team_id do
-							= f.select :team_id, @teams.map { |t| [t.name, t.id] }, include_blank: true
 						%b Admin
 						= f.input_field :admin, as: :boolean, boolean_style: :inline
 				.form-actions

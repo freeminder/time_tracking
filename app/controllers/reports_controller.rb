@@ -34,7 +34,6 @@ class ReportsController < ApplicationController
 
   def create
     @reports = Report.all
-    # @report = Report.new(report_params)
     @report = current_user.reports.build(report_params)
     if @report.save
       flash[:success] = "Report has been successfully created!"
@@ -45,6 +44,7 @@ class ReportsController < ApplicationController
   end
 
   def edit
+    @categories = Category.all
   end
 
   def update

@@ -57,41 +57,13 @@
       %tr
         %td.tg-031e= category.name
         %td.tg-031e
-        %td.tg-031e{:align => "center"}
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Monday", category.id, current_user.id)
-          = @hours["Monday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
-          - @total["hours"] += @hours["Monday"]
-          - @total["Monday_hours"] += @hours["Monday"]
-        %td.tg-031e{:align => "center"}
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Tuesday", category.id, current_user.id)
-          = @hours["Tuesday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
-          - @total["hours"] += @hours["Tuesday"]
-          - @total["Tuesday_hours"] += @hours["Tuesday"]
-        %td.tg-031e{:align => "center"}
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Wednesday", category.id, current_user.id)
-          = @hours["Wednesday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
-          - @total["hours"] += @hours["Wednesday"]
-          - @total["Wednesday_hours"] += @hours["Wednesday"]
-        %td.tg-031e{:align => "center"}
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Thursday", category.id, current_user.id)
-          = @hours["Thursday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
-          - @total["hours"] += @hours["Thursday"]
-          - @total["Thursday_hours"] += @hours["Thursday"]
-        %td.tg-031e{:align => "center"}
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Friday", category.id, current_user.id)
-          = @hours["Friday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
-          - @total["hours"] += @hours["Friday"]
-          - @total["Friday_hours"] += @hours["Friday"]
-        %td.tg-031e{:align => "center"}
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Saturday", category.id, current_user.id)
-          = @hours["Saturday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
-          - @total["hours"] += @hours["Saturday"]
-          - @total["Saturday_hours"] += @hours["Saturday"]
-        %td.tg-031e{:align => "center"}
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", "Sunday", category.id, current_user.id)
-          = @hours["Sunday"] = @report.first.hours if @report.first != nil and category.id == @report.first.categories_id
-          - @total["hours"] += @hours["Sunday"]
-          - @total["Sunday_hours"] += @hours["Sunday"]
+        = render 'td_wday', {:category => category, :wday => "Monday"}
+        = render 'td_wday', {:category => category, :wday => "Tuesday"}
+        = render 'td_wday', {:category => category, :wday => "Wednesday"}
+        = render 'td_wday', {:category => category, :wday => "Thursday"}
+        = render 'td_wday', {:category => category, :wday => "Friday"}
+        = render 'td_wday', {:category => category, :wday => "Saturday"}
+        = render 'td_wday', {:category => category, :wday => "Sunday"}
         %td.tg-031e{:align => "center"}
           %b= @hours["Monday"] + @hours["Tuesday"] + @hours["Wednesday"] + @hours["Thursday"] + @hours["Friday"] + @hours["Saturday"] + @hours["Sunday"]
         - @reports.each do |report|
@@ -113,6 +85,6 @@
   %div{:align => "right"}
     %hr
       = link_to 'Go back', :back, class: 'btn btn-primary'
-      = link_to 'Export', "#", class: 'btn btn-success'
+      / = link_to 'Export', "#", class: 'btn btn-success'
       = link_to 'Add report', new_report_path, class: 'btn btn-success'
 
