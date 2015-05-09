@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   get 'application/index'
 
   resources :reports
-  get 'reports/:id/destroy' => 'reports#destroy'
+  # get 'reports/:id/destroy' => 'reports#destroy'
+  post 'reports/create' => 'reports#create'
+  get 'reports/:id/export' => 'reports#export'
 
   resources :categories
   get 'categories/:id/destroy' => 'categories#destroy'

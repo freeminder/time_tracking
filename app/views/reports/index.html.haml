@@ -3,22 +3,22 @@
     %h2
       %b Reports
 
+  = simple_form_for @report do |f|
 
-  :css
-    .tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}
-    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
-    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
-    .tg .tg-0rnh{background-color:#D2E4FC;font-weight:bold;text-align:center}
-    .tg .tg-0ord{text-align:right}
-    .tg .tg-ifyx{background-color:#D2E4FC;text-align:right}
-    .tg .tg-vn4c{background-color:#D2E4FC} 
-    .tg .tg-e3zv{font-weight:bold}
-    .tg .tg-vv7f{background-color:#D2E4FC;font-weight:bold;text-align:center}
-    .tg .tg-hgcj{font-weight:bold;text-align:center}
-  %table.tg{:style => "undefined;table-layout: fixed; width: 1068px"}
-    %colgroup
-      %col{:style => "width: 294px"}
-        %col{:style => "width: 100px"}
+    :css
+      .tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}
+      .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+      .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
+      .tg .tg-0rnh{background-color:#D2E4FC;font-weight:bold;text-align:center}
+      .tg .tg-0ord{text-align:right}
+      .tg .tg-ifyx{background-color:#D2E4FC;text-align:right}
+      .tg .tg-vn4c{background-color:#D2E4FC} 
+      .tg .tg-e3zv{font-weight:bold}
+      .tg .tg-vv7f{background-color:#D2E4FC;font-weight:bold;text-align:center}
+      .tg .tg-hgcj{font-weight:bold;text-align:center}
+    %table.tg{:style => "undefined;table-layout: fixed; width: 1068px"}
+      %colgroup
+        %col{:style => "width: 294px"}
           %col{:style => "width: 100px"}
             %col{:style => "width: 100px"}
               %col{:style => "width: 100px"}
@@ -26,65 +26,72 @@
                   %col{:style => "width: 100px"}
                     %col{:style => "width: 100px"}
                       %col{:style => "width: 100px"}
-                        %col{:style => "width: 70px"}
-    %tr
-      %th.tg-0ord Associate Name:
-      %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
-      %th.tg-031e
-      %th.tg-031e
-      %th.tg-031e
-      %th.tg-031e
-      %th.tg-031e
-      %th.tg-031e
-      %th.tg-031e
-    %tr
-      %td.tg-vn4c
-      %td.tg-vn4c
-      %td.tg-0rnh{:colspan => "8"} For Week Starting Monday #{Date.today.beginning_of_week.strftime('%d/%m/%Y')} Through Sunday #{Date.today.end_of_week.strftime('%d/%m/%Y')}
-    %tr{:align => "center"}
-      %td.tg-e3zv Description
-      %td.tg-031e
-      %td.tg-hgcj MONDAY
-      %td.tg-hgcj TUESDAY
-      %td.tg-hgcj WEDNESDAY
-      %td.tg-hgcj THURSDAY
-      %td.tg-hgcj FRIDAY
-      %td.tg-hgcj SATURDAY
-      %td.tg-hgcj SUNDAY
-      %td.tg-hgcj TOTAL
-    - @categories.each do |category|
-      - @hours = Hash["Monday" => 0, "Tuesday" => 0, "Wednesday" => 0, "Thursday" => 0, "Friday" => 0, "Saturday" => 0, "Sunday" => 0]
+                        %col{:style => "width: 100px"}
+                          %col{:style => "width: 70px"}
       %tr
-        %td.tg-031e= category.name
+        %th.tg-0ord Associate Name:
+        %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
+        %th.tg-031e
+        %th.tg-031e
+        %th.tg-031e
+        %th.tg-031e
+        %th.tg-031e
+        %th.tg-031e
+        %th.tg-031e
+      %tr
+        %td.tg-vn4c
+        %td.tg-vn4c
+        %td.tg-0rnh{:colspan => "8"} For Week Starting Monday #{Date.today.beginning_of_week.strftime('%d/%m/%Y')} Through Sunday #{Date.today.end_of_week.strftime('%d/%m/%Y')}
+      %tr
+        %td.tg-e3zv Description
         %td.tg-031e
-        = render 'td_wday', {:category => category, :wday => "Monday"}
-        = render 'td_wday', {:category => category, :wday => "Tuesday"}
-        = render 'td_wday', {:category => category, :wday => "Wednesday"}
-        = render 'td_wday', {:category => category, :wday => "Thursday"}
-        = render 'td_wday', {:category => category, :wday => "Friday"}
-        = render 'td_wday', {:category => category, :wday => "Saturday"}
-        = render 'td_wday', {:category => category, :wday => "Sunday"}
-        %td.tg-031e{:align => "center"}
-          %b= @hours["Monday"] + @hours["Tuesday"] + @hours["Wednesday"] + @hours["Thursday"] + @hours["Friday"] + @hours["Saturday"] + @hours["Sunday"]
-        - @reports.each do |report|
-          - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", report.day, report.categories_id, current_user.id)
-          - @days.push(report.day) if @report.where(:categories_id => category.id).first != nil
-    %tr
-      %td.tg-vn4c
-        %b Signature
-      %td.tg-vn4c
-        %b= "Days Total: #{@days.uniq.size}"
-      %td.tg-vv7f= @total["Monday_hours"]
-      %td.tg-vv7f= @total["Tuesday_hours"]
-      %td.tg-vv7f= @total["Wednesday_hours"]
-      %td.tg-vv7f= @total["Thursday_hours"]
-      %td.tg-vv7f= @total["Friday_hours"]
-      %td.tg-vv7f= @total["Saturday_hours"]
-      %td.tg-vv7f= @total["Sunday_hours"]
-      %td.tg-vv7f{:align => "center"}= @total["hours"]
-  %div{:align => "right"}
+        %td.tg-hgcj SUNDAY
+        %td.tg-hgcj MONDAY
+        %td.tg-hgcj TUESDAY
+        %td.tg-hgcj WEDNESDAY
+        %td.tg-hgcj THURSDAY
+        %td.tg-hgcj FRIDAY
+        %td.tg-hgcj SATURDAY
+        %td.tg-hgcj TOTAL
+
+
+        -# puts "Simple form for #{@report}, reports = #{@report.categories.to_a}"
+        - @categories = @report.categories.to_a
+        - @categories.pop
+        - @categories.each do |category|
+          = f.simple_fields_for :hours do |ff|
+            -# puts "Simple fields for category, builder: #{ff}"
+            %tr
+              %td.tg-031e= category.name
+              %td.tg-031e
+              %td.tg-031e= ff.input :sunday, as: :integer, label: false
+              %td.tg-031e= ff.input :monday, as: :integer, label: false
+              %td.tg-031e= ff.input :tuesday, as: :integer, label: false
+              %td.tg-031e= ff.input :wednesday, as: :integer, label: false
+              %td.tg-031e= ff.input :thursday, as: :integer, label: false
+              %td.tg-031e= ff.input :friday, as: :integer, label: false
+              %td.tg-031e= ff.input :saturday, as: :integer, label: false
+              %td.tg-031e
+
+        %tr
+          %td.tg-vn4c Signature
+          %td.tg-vn4c Days Total:
+          %td.tg-vv7f
+          %td.tg-vv7f
+          %td.tg-vv7f
+          %td.tg-vv7f
+          %td.tg-vv7f
+          %td.tg-vv7f
+          %td.tg-vv7f
+          %td.tg-vv7f
     %hr
-      = link_to 'Go back', :back, class: 'btn btn-primary'
-      / = link_to 'Export', "#", class: 'btn btn-success'
-      = link_to 'Add report', new_report_path, class: 'btn btn-success'
+    %div{:align => "right"}= f.button :submit, "Submit", class: 'btn btn-success'
+
+
+
+  -# %hr
+  -# .form-actions
+  -#  %div{:align => "right"}
+  -#    = link_to 'Go back', :back, class: 'btn btn-primary'
+  -#    = f.button :submit, "Submit", class: 'btn btn-success'
 

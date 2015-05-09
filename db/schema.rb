@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150503205921) do
+ActiveRecord::Schema.define(version: 20150506171635) do
 
   create_table "categories", force: :cascade do |t|
-    t.string  "name",       limit: 255
-    t.integer "reports_id", limit: 4
+    t.string  "name",      limit: 255
+    t.integer "report_id", limit: 4
   end
 
-  add_index "categories", ["reports_id"], name: "index_categories_on_reports_id", using: :btree
+  add_index "categories", ["report_id"], name: "index_categories_on_report_id", using: :btree
 
   create_table "categories_reports", id: false, force: :cascade do |t|
     t.integer "category_id", limit: 4, null: false
@@ -28,17 +28,36 @@ ActiveRecord::Schema.define(version: 20150503205921) do
   add_index "categories_reports", ["category_id", "report_id"], name: "index_categories_reports_on_category_id_and_report_id", using: :btree
   add_index "categories_reports", ["report_id", "category_id"], name: "index_categories_reports_on_report_id_and_category_id", using: :btree
 
-  create_table "reports", force: :cascade do |t|
-    t.string   "name",          limit: 255
-    t.integer  "categories_id", limit: 4
-    t.string   "day",           limit: 255
-    t.integer  "hours",         limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id",       limit: 4
+  create_table "hours", force: :cascade do |t|
+    t.integer "sunday",      limit: 4
+    t.integer "monday",      limit: 4
+    t.integer "tuesday",     limit: 4
+    t.integer "wednesday",   limit: 4
+    t.integer "thursday",    limit: 4
+    t.integer "friday",      limit: 4
+    t.integer "saturday",    limit: 4
+    t.integer "report_id",   limit: 4
+    t.integer "category_id", limit: 4
   end
 
-  add_index "reports", ["categories_id"], name: "index_reports_on_categories_id", using: :btree
+  add_index "hours", ["category_id"], name: "index_hours_on_category_id", using: :btree
+  add_index "hours", ["report_id"], name: "index_hours_on_report_id", using: :btree
+
+  create_table "reports", force: :cascade do |t|
+    t.string   "name",                limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id",             limit: 4
+    t.integer  "category_id",         limit: 4
+    t.integer  "hours_for_monday",    limit: 4
+    t.integer  "hours_for_tuesday",   limit: 4
+    t.integer  "hours_for_wednesday", limit: 4
+    t.integer  "hours_for_thursday",  limit: 4
+    t.integer  "hours_for_friday",    limit: 4
+    t.integer  "hours_for_saturday",  limit: 4
+    t.integer  "hours_for_sunday",    limit: 4
+  end
+
   add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "teams", force: :cascade do |t|

@@ -1,8 +1,0 @@
-%td.tg-031e{:align => "center"}
-  - @report = Report.where("day = ? AND categories_id = ? AND user_id = ?", wday, category.id, current_user.id)
-  - if @report.first != nil and category.id == @report.first.categories_id
-    - @hours[wday] = @report.first.hours
-    - @total["hours"] += @hours[wday]
-    - @total["#{wday}_hours"] += @hours[wday]
-    - @link = @report.first.id
-    = link_to @hours[wday], "/reports/#{@link}"

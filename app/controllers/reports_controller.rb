@@ -1,35 +1,36 @@
 class ReportsController < ApplicationController
 
+  # respond_to :html, :xlsx, :json
   before_action :correct_report, only: [:show, :edit, :update, :destroy]
 
 
   def index
-    @reports = Report.all
-    @users = User.all
-    @categories = Category.all
+    if Report.last.id != nil and Report.where("user_id = ? AND id = ?", current_user.id, Report.last.id).count == 1
+      @hours = Hour.where(report_id: Report.last.id)
+      @report = Report.find(Report.last.id)
 
-    @days = Array.new
-    @total = Hash[
-      "hours" => 0,
-      "Monday_hours" => 0,
-      "Tuesday_hours" => 0,
-      "Wednesday_hours" => 0,
-      "Thursday_hours" => 0,
-      "Friday_hours" => 0,
-      "Saturday_hours" => 0,
-      "Sunday_hours" => 0
-    ]
+      render 'index_last'
+    else
+      @hours = Hour.all
+      @categories = Category.all
+      @report = Report.new
+
+      @report.categories = @categories.map { |x| Category.new name: x.name }
+      @report.categories.build
+      @report.hours.build
+      render 'index'
+    end
   end
 
   def show
-    @users = User.all
-    @category_id = @report.categories_id
-    @category = Category.find(@category_id)
-  end
-
-  def new
-    @report = Report.new
     @categories = Category.all
+    @hours = Hour.where(report_id: params[:id])
+    n = 0
+    @hours.each do |hour|
+      hour.update_attributes(category_id: @categories[n].id)
+      n+=1
+    end
+    redirect_to reports_path
   end
 
   def create
@@ -43,14 +44,28 @@ class ReportsController < ApplicationController
     end
   end
 
-  def edit
-    @categories = Category.all
-  end
-
   def update
     if @report.update_attributes(report_params)
+      Hour.where(report_id: params[:id]).where.not(category_id: nil).delete_all
+      @categories = Category.all
+      cat_size = @categories.count+1
+      puts "cat_size: #{cat_size}"
+      n = 0
+      @hours = Hour.where(report_id: params[:id])
+      # raise params.inspect
+      until n == cat_size-1
+        puts "N: #{n}"
+        @hours[n].update_attributes(category_id: @categories[n].id) if @hours[n].category_id == nil
+        puts "Updated category: #{@hours[n].category_id}"
+        puts "Updated #{@hours[n]}"
+        puts "cat_size: #{cat_size}"
+        n+=1
+      end
+
+
+
       respond_to do |format|
-        format.any { redirect_to :back, notice: 'Report has been successfully updated!' }
+        format.any { redirect_to reports_path, notice: 'Report has been successfully updated!' }
       end
     else
       respond_to do |format|
@@ -59,24 +74,26 @@ class ReportsController < ApplicationController
     end
   end
 
-  def destroy
-    if @report.destroy
-      respond_to do |format|
-        format.any { redirect_to action: 'index' }
-        flash[:notice] = 'Report has been successfully deleted!'
-      end
+
+  def export
+    @hours = Hour.where(report_id: params[:id])
+    if render xlsx: "export", template: "reports/export"
+    # respond_to do |format|
+    #   format.xlsx
+    # end
+      flash[:notice] = 'Report has been successfully exported!'
     else
-      respond_to do |format|
-        format.any { render action: 'edit' }
-      end
+      flash[:error] = 'Something goes wrong!'
     end
+    # render 'index_last'
   end
 
 private
 
   def report_params
-    params.require(:report).permit(:name, :day, :hours, :categories_id, :user_id)
+    params.require(:report).permit(:id, :name, :category_id, :user_id, hours_attributes:[:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
   end
+
 
   # Before filters
 

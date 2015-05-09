@@ -1,3 +1,19 @@
+GIT
+  remote: git://github.com/derekprior/momentjs-rails.git
+  revision: 9fac38f9b7603ad5da4cba4d971654370f9e2d7b
+  specs:
+    momentjs-rails (2.10.2)
+      railties (>= 3.1)
+
+GIT
+  remote: git://github.com/zpaulovics/datetimepicker-rails.git
+  revision: c5405f3486b57a52416caf93b79fc09d56930a82
+  branch: master
+  submodules: true
+  specs:
+    datetimepicker-rails (4.7.15)
+      momentjs-rails (>= 2.9.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -40,6 +56,13 @@ GEM
     autoprefixer-rails (5.1.11)
       execjs
       json
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
+    axlsx_rails (0.3.0)
+      axlsx (>= 2.0.1)
+      rails (>= 3.1)
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -73,6 +96,7 @@ GEM
       activesupport (>= 4.1.0)
     haml (4.0.6)
       tilt
+    htmlentities (4.3.3)
     i18n (0.7.0)
     jbuilder (2.2.13)
       activesupport (>= 3.0.0, < 5)
@@ -125,6 +149,7 @@ GEM
     rdoc (4.2.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    rubyzip (1.0.0)
     sass (3.4.13)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
@@ -167,14 +192,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  axlsx_rails
   bootstrap-sass (~> 3.3.4)
   byebug
   coffee-rails (~> 4.1.0)
+  datetimepicker-rails!
   devise
   font-awesome-sass
   haml
   jbuilder (~> 2.0)
   jquery-rails
+  momentjs-rails (~> 2.9)!
   mysql2
   rails (= 4.2.1)
   sass-rails (>= 3.2)

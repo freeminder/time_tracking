@@ -1,0 +1,80 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Reports") do |sheet|
+  header_center = wb.styles.add_style(:b=>true, :bg_color=>"AABCFE",
+                             :fg_color=>"003399",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+  header_right = wb.styles.add_style(:bg_color=>"AABCFE",
+                             :fg_color=>"003399",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :right})
+  bold_center = wb.styles.add_style(:b=>true, :bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+  bold_right = wb.styles.add_style(:b=>true, :bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :right})
+  regular_center = wb.styles.add_style(:bg_color=>"e8edff",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+  regular_left = wb.styles.add_style(:bg_color=>"e8edff",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :left})
+  signature_left = wb.styles.add_style(:bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :left})
+  total_regular_center = wb.styles.add_style(:bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :left})
+  total_bold_center = wb.styles.add_style(:b=>true, :bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+
+  sheet.add_row ["Associate Name:", "#{current_user.first_name} #{current_user.last_name}", "", "", "", "", "", "", "", ""],
+    :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
+    :style=>[header_right, header_center, header_center, header_center, header_center, header_center, header_center, header_center, header_center, header_center]
+  sheet.add_row ["", "", "For Week Starting Sunday Through Saturday", "", "", "", "", "", "", ""],
+    :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
+    :style=>[bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center]
+  sheet.add_row ["Description", "", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "TOTAL"],
+    :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
+    :style=>[bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center, bold_center]
+
+  @cnum = 0
+  @rnum = 4
+  @days = Array.new
+  @hours.each do |hour|
+    sheet.add_row [Category.find(hour.category_id).name, "", hour.sunday, hour.monday, hour.tuesday, hour.wednesday, hour.thursday, hour.friday, hour.saturday, "=SUM(C#{@rnum}:I#{@rnum})"],
+      :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
+      :style=>[regular_left, regular_center, regular_center, regular_center, regular_center, regular_center, regular_center, regular_center, regular_center, regular_center]
+      @cnum += 1
+      @rnum += 1
+    @days.push("SUNDAY") if hour.sunday != nil
+    @days.push("MONDAY") if hour.monday != nil
+    @days.push("TUESDAY") if hour.tuesday != nil
+    @days.push("WEDNESDAY") if hour.wednesday != nil
+    @days.push("THURSDAY") if hour.thursday != nil
+    @days.push("FRIDAY") if hour.friday != nil
+    @days.push("SATURDAY") if hour.saturday != nil
+  end
+  @cnum += 3
+
+  # @total_cell = sheet.rows.first.cells.last.index
+  sheet.add_row ["Signature", "Days Total: #{@days.uniq.size}", "=SUM(C4:C#{@cnum})", "=SUM(D4:D#{@cnum})", "=SUM(E4:E#{@cnum})", "=SUM(F4:F#{@cnum})", "=SUM(G4:G#{@cnum})", "=SUM(H4:H#{@cnum})", "=SUM(I4:I#{@cnum})", "=SUM(J4:J#{@cnum})"],
+    :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
+    :style=>[signature_left, total_regular_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center]
+
+  sheet.merge_cells "B1:C1"
+  sheet.merge_cells "C2:I2"
+
+  # sheet.merge_cells worksheet.rows.first.cells[(2..4)]
+
+end
+
