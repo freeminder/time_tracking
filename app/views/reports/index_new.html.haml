@@ -3,7 +3,7 @@
     %h2
       %b Reports
 
-  = simple_form_for @report, :url => "/reports/#{@report.id}", :method => :patch do |f|
+  = simple_form_for @report do |f|
 
     :css
       .tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}
@@ -36,29 +36,12 @@
         %th.tg-031e
         %th.tg-031e
         %th.tg-031e{:colspan => "3"}
-          #datetimepicker1.input-group.date
-            %input.form-control{:type => "text"}/
-            %span.input-group-addon
-              %span.glyphicon.glyphicon-calendar
-          :javascript
-            $(function () {
-                $('#datetimepicker1').datepicker({
-                 daysOfWeekDisabled: "1,2,3,4,5,6",
-                 calendarWeeks: true,
-                 todayHighlight: true,
-                 toggleActive: true
-                });
-            });
       %tr
         %td.tg-vn4c
         %td.tg-vn4c
         %td.tg-vn4c
-          = link_to "< Previous", "/reports/#{@previous.id}" if @previous
-          = "< Previous" if @previous == nil
-        %td.tg-0rnh{:colspan => "6"}= "For Week Starting Sunday #{Date.today.beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')} Through Saturday #{Date.today.end_of_week(start_day = :sunday).strftime('%m/%d/%Y')}"
+        %td.tg-0rnh{:colspan => "6"}= "For Week Starting Sunday #{@week_begin} Through Saturday #{@week_end}"
         %td.tg-vn4c
-          = link_to "Next >", "/reports/#{@next.id}" if @next
-          = "Next >" if @next == nil
       %tr
         %td.tg-0rnh Description
         %td.tg-0rnh
@@ -72,20 +55,22 @@
         %td.tg-0rnh TOTAL
 
 
-        - n = 0
-        = f.simple_fields_for :hours do |ff|
-          %tr
-            %td.tg-031e= Category.find(@hours.to_a[n].category_id).name
-            %td.tg-031e
-            %td.tg-031e= ff.input :sunday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-            %td.tg-031e= ff.input :monday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-            %td.tg-031e= ff.input :tuesday,   as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-            %td.tg-031e= ff.input :wednesday, as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-            %td.tg-031e= ff.input :thursday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-            %td.tg-031e= ff.input :friday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-            %td.tg-031e= ff.input :saturday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-            %td.tg-031e
-          - n+=1
+        - @categories = @report.categories.to_a
+        - @categories.pop
+        - @categories.each do |category|
+          = f.simple_fields_for :hours do |ff|
+            %tr
+              %td.tg-031e= category.name
+              %td.tg-031e
+              %td.tg-031e= ff.input :sunday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+              %td.tg-031e= ff.input :monday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+              %td.tg-031e= ff.input :tuesday,   as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+              %td.tg-031e= ff.input :wednesday, as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+              %td.tg-031e= ff.input :thursday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+              %td.tg-031e= ff.input :friday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+              %td.tg-031e= ff.input :saturday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+              %td.tg-031e
+
         %tr
           %td.tg-vn4c
             %b Signature
@@ -100,6 +85,4 @@
           %td.tg-vv7f
           %td.tg-vv7f
     %hr
-    %div{:align => "right"}
-      = link_to 'Export', "/reports/#{$report_id}/export", class: 'btn btn-primary'
-      = f.button :submit, "Submit", class: 'btn btn-success'
+    %div{:align => "right"}= f.button :submit, "Submit", class: 'btn btn-success'

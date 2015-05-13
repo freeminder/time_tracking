@@ -4,6 +4,5 @@
 			%p.lead= "#{@category.name}"
 			%div{:align => "right"}
 				%hr
-				= link_to 'Go back', :back, class: 'btn btn-primary'
 				= link_to 'Delete', "/categories/#{@category.id}/destroy", class: 'btn btn-danger'
 				= link_to 'Edit', edit_category_path, class: 'btn btn-success'

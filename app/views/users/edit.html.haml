@@ -16,6 +16,5 @@
 						%b Admin
 						= f.input_field :admin, as: :boolean, boolean_style: :inline
 				.form-actions
-					= link_to 'Go back', :back, class: 'btn btn-primary'
 					= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger'
 					= f.button :submit, "Update", class: 'btn btn-success'

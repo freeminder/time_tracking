@@ -12,5 +12,4 @@
 					= link_to user.email, "/users/#{user.id}" if user.team_id == team.id
 %hr
 %div{:align => "right"}
-	= link_to 'Go back', :back, class: 'btn btn-primary'
 	= link_to 'Add team', new_team_path, class: 'btn btn-success'

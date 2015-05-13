@@ -1,0 +1,104 @@
+.container
+  %center
+    %h2
+      %b Reports
+
+
+  :css
+    .tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;margin:0px auto;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
+    .tg .tg-0rnh{background-color:#D2E4FC;font-weight:bold;text-align:center}
+    .tg .tg-0ord{text-align:right}
+    .tg .tg-ifyx{background-color:#D2E4FC;text-align:right}
+    .tg .tg-vn4c{background-color:#D2E4FC} 
+    .tg .tg-e3zv{font-weight:bold}
+    .tg .tg-vv7f{background-color:#D2E4FC;font-weight:bold;text-align:center}
+    .tg .tg-hgcj{font-weight:bold;text-align:center}
+  %table.tg{:style => "undefined;table-layout: fixed; width: 1068px"}
+    %colgroup
+      %col{:style => "width: 294px"}
+        %col{:style => "width: 100px"}
+          %col{:style => "width: 100px"}
+            %col{:style => "width: 100px"}
+              %col{:style => "width: 100px"}
+                %col{:style => "width: 100px"}
+                  %col{:style => "width: 100px"}
+                    %col{:style => "width: 100px"}
+                      %col{:style => "width: 100px"}
+                        %col{:style => "width: 70px"}
+    %tr
+      %th.tg-0ord Associate Name:
+      %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e{:colspan => "3"}
+        #datetimepicker1.input-group.date
+          %input.form-control{:type => "text"}/
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-calendar
+        :javascript
+          $(function () {
+              $('#datetimepicker1').datepicker({
+               daysOfWeekDisabled: "1,2,3,4,5,6",
+               calendarWeeks: true,
+               todayHighlight: true,
+               toggleActive: true
+              });
+          });
+    %tr
+      %td.tg-vn4c
+      %td.tg-vn4c
+      %td.tg-vn4c
+        = link_to "< Previous", "/reports/#{@previous.id}" if @previous
+        = "< Previous" if @previous == nil
+      %td.tg-0rnh{:colspan => "6"}= "For Week Starting Sunday #{@week_begin} Through Saturday #{@week_end}"
+      %td.tg-vn4c
+        = link_to "Next >", "/reports/#{@next.id}" if @next
+        = "Next >" if @next == nil
+    %tr{:align => "center"}
+      %td.tg-0rnh Description
+      %td.tg-0rnh
+      %td.tg-0rnh SUNDAY
+      %td.tg-0rnh MONDAY
+      %td.tg-0rnh TUESDAY
+      %td.tg-0rnh WEDNESDAY
+      %td.tg-0rnh THURSDAY
+      %td.tg-0rnh FRIDAY
+      %td.tg-0rnh SATURDAY
+      %td.tg-0rnh TOTAL
+
+
+    - n = 0
+    - @hours.each do |hour|
+      %tr
+        %td.tg-031e= Category.find(@hours.to_a[n].category_id).name
+        %td.tg-031e
+        %td.tg-031e{:align => "center"}= @hours.to_a[n].sunday
+        %td.tg-031e{:align => "center"}= @hours.to_a[n].monday
+        %td.tg-031e{:align => "center"}= @hours.to_a[n].tuesday
+        %td.tg-031e{:align => "center"}= @hours.to_a[n].wednesday
+        %td.tg-031e{:align => "center"}= @hours.to_a[n].thursday
+        %td.tg-031e{:align => "center"}= @hours.to_a[n].friday
+        %td.tg-031e{:align => "center"}= @hours.to_a[n].saturday
+        %td.tg-031e{:align => "center"}
+      - n+=1
+
+    %tr
+      %td.tg-vn4c
+        %b Signature
+      %td.tg-vn4c
+        %b= "Days Total: "
+      %td.tg-vv7f
+      %td.tg-vv7f
+      %td.tg-vv7f
+      %td.tg-vv7f
+      %td.tg-vv7f
+      %td.tg-vv7f
+      %td.tg-vv7f
+      %td.tg-vv7f{:align => "center"}
+  %hr
+  %div{:align => "right"}
+    = link_to 'Export', "/reports/#{$report_id}/export", class: 'btn btn-primary'

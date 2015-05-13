@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
     @reports = Report.all
   end
 
+  def authorize_admin
+    redirect_to root_path, alert: 'Access Denied' unless current_user.admin?
+  end
+
 
   protected
 

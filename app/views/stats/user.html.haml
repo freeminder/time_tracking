@@ -1,0 +1,24 @@
+.container
+  .row
+    .col-md-5
+      %p.lead= "Single user's time over a specific period"
+      %hr
+      = form_tag("", method: "post") do
+        .form-group
+          = label_tag(:user_id, "User: ")
+          = select_tag 'user_id', options_from_collection_for_select(@users, 'id', 'fullname'), class: 'form-control'
+          %br/
+          = label_tag(:date, "Date: ")
+          / - grouped_options = { 'Weeks' => ['current week','last week'], 'Month' => ['current month','last month'] }
+          / = select_tag 'date', grouped_options_for_select(grouped_options), class: 'form-control'
+          = select_tag 'date', options_for_select([["Last week", "last_week"], ["Last month", "last_month"], ["Last year", "last_year"]]), class: 'form-control'
+          %br/
+          = "OR select custom date"
+          %br/
+          %br/
+          = label_tag(:date_custom, "Custom date: ")
+          = text_field_tag(:date_custom, nil, class: 'form-control')
+          %hr
+          %div{:align => "right"}
+            = submit_tag("Generate stats", class: 'btn btn-success')
+

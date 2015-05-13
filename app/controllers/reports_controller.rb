@@ -1,15 +1,42 @@
 class ReportsController < ApplicationController
 
-  # respond_to :html, :xlsx, :json
   before_action :correct_report, only: [:show, :edit, :update, :destroy]
+  before_action :correct_week, only: [:index, :show, :update]
 
 
   def index
-    if Report.last.id != nil and Report.where("user_id = ? AND id = ?", current_user.id, Report.last.id).count == 1
+    if $report_id and Report.where("user_id = ? AND id = ?",
+                                   current_user.id, Report.find($report_id)).count == 1
+      @hours = Hour.where(report_id: $report_id)
+      @report = Report.find($report_id)
+
+      @previous = Report.where(["user_id = ? AND id < ?", current_user.id, @report.id]).last
+      @next     = Report.where(["user_id = ? AND id > ?", current_user.id, @report.id]).first
+      @week_begin = DateTime.parse(Report.find($report_id).created_at.to_s).beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_end   = DateTime.parse(Report.find($report_id).created_at.to_s).end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+
+      # current week, landing from show method
+      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ?",
+                                     current_user.id, Report.find($report_id), @week_id).count == 1
+      # previous week locked, landing from show method
+      render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
+                                            current_user.id, Report.find($report_id), @week_id).count >= 1
+
+    elsif $report_id.nil? and Report.last.id and Report.where("user_id = ? AND id = ?",
+                                                              current_user.id, Report.last.id).count == 1
       @hours = Hour.where(report_id: Report.last.id)
       @report = Report.find(Report.last.id)
 
-      render 'index_last'
+      @previous = Report.where(["user_id = ? AND id < ?", current_user.id, @report.id]).last
+      @next     = Report.where(["user_id = ? AND id > ?", current_user.id, @report.id]).first
+
+      # current week, landing from restored session
+      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ?",
+                                     current_user.id, Report.find(@report.id), @week_id).count == 1
+      # previous week locked, landing from restored session
+      render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
+                                            current_user.id, Report.find(@report.id), @week_id).count >= 1
+
     else
       @hours = Hour.all
       @categories = Category.all
@@ -18,18 +45,25 @@ class ReportsController < ApplicationController
       @report.categories = @categories.map { |x| Category.new name: x.name }
       @report.categories.build
       @report.hours.build
-      render 'index'
+
+      # new week or first time
+      render 'index_new'
     end
   end
 
   def show
     @categories = Category.all
-    @hours = Hour.where(report_id: params[:id])
+    cat_size = @categories.count+1
     n = 0
-    @hours.each do |hour|
-      hour.update_attributes(category_id: @categories[n].id)
+    @hours = Hour.where(report_id: params[:id])
+    until n == cat_size-1
+      @hours[n].update_attributes(category_id: @categories[n].id) if @hours[n].category_id == nil
       n+=1
     end
+    @report.update_attributes(week_id: @week_id) if @report.week_id == nil
+
+    # save global variable for Previous and Next navigation
+    $report_id = params[:id]
     redirect_to reports_path
   end
 
@@ -61,9 +95,11 @@ class ReportsController < ApplicationController
         puts "cat_size: #{cat_size}"
         n+=1
       end
+      @report.update_attributes(week_id: @week_id) if @report.week_id == nil
 
 
 
+      $report_id = params[:id]
       respond_to do |format|
         format.any { redirect_to reports_path, notice: 'Report has been successfully updated!' }
       end
@@ -78,20 +114,17 @@ class ReportsController < ApplicationController
   def export
     @hours = Hour.where(report_id: params[:id])
     if render xlsx: "export", template: "reports/export"
-    # respond_to do |format|
-    #   format.xlsx
-    # end
       flash[:notice] = 'Report has been successfully exported!'
     else
       flash[:error] = 'Something goes wrong!'
     end
-    # render 'index_last'
   end
+
 
 private
 
   def report_params
-    params.require(:report).permit(:id, :name, :category_id, :user_id, hours_attributes:[:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
+    params.require(:report).permit(:id, :name, :category_id, :user_id, :week_id, hours_attributes:[:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
   end
 
 
@@ -99,6 +132,12 @@ private
 
   def correct_report
     @report = Report.find(params[:id])
+  end
+
+  def correct_week
+    # %U - Week number of the year. The week starts with Sunday. (00..53)
+    # %W - Week number of the year. The week starts with Monday. (00..53)
+    @week_id = Date.today.strftime("%U").to_i
   end
 
 

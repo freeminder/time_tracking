@@ -2,8 +2,20 @@ Rails.application.routes.draw do
   root 'application#index'
   get 'application/index'
 
+  resources :stats
+  get 'stats/user' => 'stats#user'
+  post 'stats/user' => 'stats#reports'
+  get 'stats/users' => 'stats#users'
+  post 'stats/users' => 'stats#reports'
+  get 'stats/team' => 'stats#team'
+  post 'stats/team' => 'stats#reports'
+  get 'stats/category' => 'stats#category'
+  post 'stats/category' => 'stats#reports'
+  get 'stats/categories' => 'stats#categories'
+  post 'stats/categories' => 'stats#reports'
+
+
   resources :reports
-  # get 'reports/:id/destroy' => 'reports#destroy'
   post 'reports/create' => 'reports#create'
   get 'reports/:id/export' => 'reports#export'
 

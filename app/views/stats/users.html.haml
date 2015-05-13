@@ -1,0 +1,35 @@
+.container
+  .row
+    .col-md-5
+      %p.lead= "Multiple user's time over a specific period"
+      %hr
+      / = simple_form_for @report do |f|
+      /   = f.error_notification
+      /   .form-group
+      /     / - @users_fullnames
+      /     / = f.input :user_id, :as => :select, collection: @users_fullnames, prompt: "Select user"
+      /     = f.input :user_id do
+      /       = f.select :user_id, User.all.map { |r| ["#{r.first_name} #{r.last_name}", r.id] }, prompt: "Select user", class: 'my_class'
+      /   .form-actions
+      /     / = link_to 'Go back', :back, class: 'btn btn-primary'
+      /     / = link_to 'Delete', "/stats/user", class: 'btn btn-danger'
+      /     = f.button :submit, "Update", class: 'btn btn-success'
+
+
+/ %h2
+/   %b Single user's time over a specific period
+
+/ add calendar here
+/ = simple_form_for @report, :url => "/stats/user", :method => :get do |f|
+/   = f.input :user_id, collection: @users, prompt: "Select user"
+/   = f.button :submit, "Submit", class: 'btn btn-success'
+
+
+/ %table.table
+/   - @categories.each do |category|
+/     %tr
+/       %td= link_to category.name, category_path(category.id)
+/ %hr
+/ %div{:align => "right"}
+/   = link_to 'Go back', :back, class: 'btn btn-primary'
+/   = link_to 'Generate stats', new_category_path, class: 'btn btn-success'

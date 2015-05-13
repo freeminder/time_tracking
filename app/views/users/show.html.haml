@@ -11,6 +11,5 @@
 				= "no one" if @user.team == nil
 				= " team"
 				%hr
-				= link_to 'Go back', :back, class: 'btn btn-primary'
-				= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger'
-				= link_to 'Edit', edit_user_path, class: 'btn btn-success'
+				= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger' if current_user.admin?
+				= link_to 'Edit', edit_user_path, class: 'btn btn-success' if current_user.admin?

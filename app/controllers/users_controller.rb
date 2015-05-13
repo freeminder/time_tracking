@@ -1,11 +1,22 @@
 class UsersController < ApplicationController
 
+  before_filter :authorize_admin, except: [:show]
+
+
   def index
     @users = User.all
   end
 
   def show
-    @user = User.find(params[:id])
+    if current_user.admin?
+      @user = User.find(params[:id])
+    else
+      if current_user.id == params[:id].to_i
+        @user = User.find(params[:id])
+      else
+        redirect_to root_path, alert: 'Access Denied'
+      end
+    end
   end
 
   def new

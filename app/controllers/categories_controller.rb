@@ -1,5 +1,8 @@
 class CategoriesController < ApplicationController
 
+  before_filter :authorize_admin
+
+
   def index
     @categories = Category.all
   end
