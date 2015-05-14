@@ -21,6 +21,26 @@ class ReportsController < ApplicationController
       # previous week locked, landing from show method
       render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
                                             current_user.id, Report.find($report_id), @week_id).count >= 1
+      $report_id = nil
+
+    elsif Report.where("user_id = ? AND week_id = ?", current_user.id, @week_id).count == 0
+      @week_begin = Date.today.beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_end   = Date.today.end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+
+      @previous = Report.where(["user_id = ? AND week_id < ?", current_user.id, @week_id]).last
+
+      @hours = Hour.all
+      @categories = Category.all
+      @report = Report.new
+
+
+      @report.categories = @categories.map { |x| Category.new name: x.name }
+      @report.categories.build
+      @report.hours.build
+
+      # new week or first time
+      $report_id = nil
+      render 'index_new'
 
     elsif $report_id.nil? and Report.last.id and Report.where("user_id = ? AND id = ?",
                                                               current_user.id, Report.last.id).count == 1
@@ -38,16 +58,6 @@ class ReportsController < ApplicationController
                                             current_user.id, Report.find(@report.id), @week_id).count >= 1
 
     else
-      @hours = Hour.all
-      @categories = Category.all
-      @report = Report.new
-
-      @report.categories = @categories.map { |x| Category.new name: x.name }
-      @report.categories.build
-      @report.hours.build
-
-      # new week or first time
-      render 'index_new'
     end
   end
 
@@ -66,6 +76,31 @@ class ReportsController < ApplicationController
     $report_id = params[:id]
     redirect_to reports_path
   end
+
+
+  def search
+    # selected time range
+    if params[:date_custom] != ""
+      @date = Time.strptime(params[:date_custom],"%m/%d/%Y")
+      @date_beg = DateTime.parse(@date.to_s).beginning_of_week(start_day = :sunday)
+      @date_end = DateTime.parse(@date.to_s).end_of_week(start_day = :sunday)
+    else
+      flash[:alert] = "No input data has been received!"
+      redirect_to :back
+    end
+
+    # reports filter
+    @reports = Report.where("user_id = ? AND created_at >= ? AND created_at <= ?", current_user.id, @date_beg, @date_end)
+
+    if @reports.count >= 1
+      redirect_to "/reports/#{@reports.first.id}"
+    else
+      flash[:alert] = "No reports has been found for a specific period!"
+      redirect_to :back
+    end
+  end
+
+
 
   def create
     @reports = Report.all

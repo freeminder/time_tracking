@@ -2,6 +2,28 @@
   %center
     %h2
       %b Reports
+  .row
+    .col-md-3
+    .col-md-3
+    .col-md-3
+    .col-md-3
+      = form_tag("/reports/search", method: "post") do
+        .form-group
+          = label_tag(:date_custom, "Previous reports (custom date): ")
+          #datetimepicker1.input-group.date
+            = text_field_tag(:date_custom, nil, class: 'form-control')
+            %span.input-group-addon
+              %span.glyphicon.glyphicon-calendar
+          :javascript
+            $(function () {
+                $('#datetimepicker1').datepicker({
+                 daysOfWeekDisabled: "1,2,3,4,5,6",
+                 calendarWeeks: true,
+                 todayHighlight: true,
+                 toggleActive: true
+                });
+            });
+          %div{:align => "right"}= submit_tag("Search", class: 'btn btn-success')
 
 
   :css
@@ -34,31 +56,21 @@
       %th.tg-031e
       %th.tg-031e
       %th.tg-031e
-      %th.tg-031e{:colspan => "3"}
-        #datetimepicker1.input-group.date
-          %input.form-control{:type => "text"}/
-          %span.input-group-addon
-            %span.glyphicon.glyphicon-calendar
-        :javascript
-          $(function () {
-              $('#datetimepicker1').datepicker({
-               daysOfWeekDisabled: "1,2,3,4,5,6",
-               calendarWeeks: true,
-               todayHighlight: true,
-               toggleActive: true
-              });
-          });
+      %th.tg-031e
+      %th.tg-031e
+      %th.tg-031e
+
     %tr
       %td.tg-vn4c
       %td.tg-vn4c
-      %td.tg-vn4c
+      %td.tg-0rnh
         = link_to "< Previous", "/reports/#{@previous.id}" if @previous
         = "< Previous" if @previous == nil
-      %td.tg-0rnh{:colspan => "6"}= "For Week Starting Sunday #{@week_begin} Through Saturday #{@week_end}"
-      %td.tg-vn4c
+      %td.tg-0rnh{:colspan => "6"}= "For Week Starting Sunday #{Date.today.beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')} Through Saturday #{Date.today.end_of_week(start_day = :sunday).strftime('%m/%d/%Y')}"
+      %td.tg-0rnh
         = link_to "Next >", "/reports/#{@next.id}" if @next
         = "Next >" if @next == nil
-    %tr{:align => "center"}
+    %tr
       %td.tg-0rnh Description
       %td.tg-0rnh
       %td.tg-0rnh SUNDAY
@@ -69,7 +81,6 @@
       %td.tg-0rnh FRIDAY
       %td.tg-0rnh SATURDAY
       %td.tg-0rnh TOTAL
-
 
     - n = 0
     - @hours.each do |hour|

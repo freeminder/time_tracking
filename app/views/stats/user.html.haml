@@ -9,15 +9,26 @@
           = select_tag 'user_id', options_from_collection_for_select(@users, 'id', 'fullname'), class: 'form-control'
           %br/
           = label_tag(:date, "Date: ")
-          / - grouped_options = { 'Weeks' => ['current week','last week'], 'Month' => ['current month','last month'] }
-          / = select_tag 'date', grouped_options_for_select(grouped_options), class: 'form-control'
-          = select_tag 'date', options_for_select([["Last week", "last_week"], ["Last month", "last_month"], ["Last year", "last_year"]]), class: 'form-control'
+          = select_tag 'date', options_for_select([["Last week", "last_week"], ["Last month", "last_month"], ["Last year", "last_year"]]),
+           class: 'form-control', prompt: "Select a date"
           %br/
           = "OR select custom date"
           %br/
           %br/
           = label_tag(:date_custom, "Custom date: ")
-          = text_field_tag(:date_custom, nil, class: 'form-control')
+          #datetimepicker1.input-group.date
+            = text_field_tag(:date_custom, nil, class: 'form-control')
+            %span.input-group-addon
+              %span.glyphicon.glyphicon-calendar
+          :javascript
+            $(function () {
+                $('#datetimepicker1').datepicker({
+                 todayHighlight: true,
+                 toggleActive: true
+                });
+            });
+
+
           %hr
           %div{:align => "right"}
             = submit_tag("Generate stats", class: 'btn btn-success')

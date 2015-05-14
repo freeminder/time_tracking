@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :reports
   post 'reports/create' => 'reports#create'
   get 'reports/:id/export' => 'reports#export'
+  post 'reports/search' => 'reports#search'
 
   resources :categories
   get 'categories/:id/destroy' => 'categories#destroy'

@@ -8,8 +8,8 @@ class StatsController < ApplicationController
 
 
   def show
-    @categories = Category.all
     @teams = Team.all
+    @categories = Category.all
 
     # get user's fullname (map array of hashes to method name)
     require 'ostruct'
@@ -43,7 +43,9 @@ class StatsController < ApplicationController
 
   def reports
     # selected time range
-    if params[:date] == "last_week"
+    if params[:date_custom] != ""
+      @date = Time.strptime(params[:date_custom],"%m/%d/%Y")
+    elsif params[:date] == "last_week"
       @date = 1.weeks.ago
     elsif params[:date] == "last_month"
       @date = 1.months.ago
@@ -53,13 +55,46 @@ class StatsController < ApplicationController
       @date = 1.seconds.ago
     end
 
-    # reports filter
-    @stats = Report.where("user_id = ? AND created_at >= ?", params[:user_id], @date) if params[:user_id]
-    # @stats = Report.where("team_id = ? AND created_at >= ?", params[:team_id], @date) if params[:team_id]
-    @hours = Array.new
-    @stats.to_a.each do |report|
-      @hours.push(Hour.where(report_id: report.id))
-      puts "pushed #{report.id}"
+    # reports filter for team
+    if params[:team_id]
+      @team_users = User.where("team_id = ?", params[:team_id])
+      @stats = Array.new
+      @team_users.each do |user|
+        @stats.push(Report.where("user_id = ? AND created_at >= ?", user.id, @date))
+      end
+      @hours = Array.new
+      @stats.to_a.each do |report|
+        report.each do |rr|
+          puts "pushing #{rr.inspect}"
+          @hours.push(Hour.where(report_id: rr.id))
+          puts "pushed #{rr.id}"
+        end
+      end
+    # reports filter for single category
+    elsif params[:category_id]
+      @category_hours = Hour.where("category_id = ?", params[:category_id])
+      @stats = Array.new
+      @category_hours.each do |c_hour|
+        @stats.push(Report.where("id = ? AND created_at >= ?", c_hour.report_id, @date))
+      end
+      @hours = Array.new
+      @stats.to_a.each do |report|
+        report.each do |rr|
+          puts "pushing #{rr.inspect}"
+          @hours.push(Hour.where(report_id: rr.id))
+          puts "pushed #{rr.id}"
+        end
+      end
+    # reports filter for single user
+    elsif params[:user_id]
+      @stats = Report.where("user_id = ? AND created_at >= ?", params[:user_id], @date)
+      @hours = Array.new
+      @stats.to_a.each do |report|
+        puts "pushing #{report.inspect}"
+        @hours.push(Hour.where(report_id: report.id))
+        puts "pushed #{report.id}"
+      end
+    else
     end
 
     # time calculation
@@ -81,57 +116,6 @@ class StatsController < ApplicationController
 
   end
 
-#   def new
-#     @stat = Stat.new
-#   end
-
-#   def create
-#     @stat = Stat.new(stat_params)
-#     @stats = Stat.all
-#     if @stat.save
-#       flash[:success] = "Stat has been successfully created!"
-#       redirect_to @stat
-#     else
-#       render 'new'
-#     end
-#   end
-
-#   def edit
-#     @stat = Stat.find(params[:id])
-#   end
-
-#   def update
-#     @stat = Stat.find(params[:id])
-#     if @stat.update_attributes(stat_params)
-#       respond_to do |format|
-#         format.any { redirect_to :back, notice: 'Stat has been successfully updated!' }
-#       end
-#     else
-#       respond_to do |format|
-#         format.any { render action: 'edit' }
-#       end
-#     end
-#   end
-
-#   def destroy
-#     @stat = Stat.find(params[:id])
-#     if @stat.destroy
-#       respond_to do |format|
-#         format.any { redirect_to action: 'index' }
-#         flash[:notice] = 'Stat has been successfully deleted!'
-#       end
-#     else
-#       respond_to do |format|
-#         format.any { render action: 'edit' }
-#       end
-#     end
-#   end
-
-# private
-
-#   def stat_params
-#     params.require(:stat).permit(:name)
-#   end
 
 
 end

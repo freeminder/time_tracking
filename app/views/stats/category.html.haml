@@ -3,3 +3,33 @@
     .col-md-5
       %p.lead= "Single category stats for a specific period of time"
       %hr
+      = form_tag("", method: "post") do
+        .form-group
+          = label_tag(:category_id, "Category: ")
+          = select_tag 'category_id', options_from_collection_for_select(@categories, 'id', 'name'), class: 'form-control'
+          %br/
+          = label_tag(:date, "Date: ")
+          = select_tag 'date', options_for_select([["Last week", "last_week"], ["Last month", "last_month"], ["Last year", "last_year"]]),
+           class: 'form-control', prompt: "Select a date"
+          %br/
+          = "OR select custom date"
+          %br/
+          %br/
+          = label_tag(:date_custom, "Custom date: ")
+          #datetimepicker1.input-group.date
+            = text_field_tag(:date_custom, nil, class: 'form-control')
+            %span.input-group-addon
+              %span.glyphicon.glyphicon-calendar
+          :javascript
+            $(function () {
+                $('#datetimepicker1').datepicker({
+                 todayHighlight: true,
+                 toggleActive: true
+                });
+            });
+
+
+          %hr
+          %div{:align => "right"}
+            = submit_tag("Generate stats", class: 'btn btn-success')
+
