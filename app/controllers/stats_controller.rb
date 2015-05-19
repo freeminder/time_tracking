@@ -64,6 +64,47 @@ class StatsController < ApplicationController
         @hours.push(Hour.where(report_id: report.id))
         puts "pushed #{report.id}"
       end
+
+      @cat_size = Category.count
+      @total_hours = 0
+
+      @tsumtcat = Array.new(@cat_size) { |i| i = 0 }
+      @hours.each do |report|
+        puts "REPORT : #{report.to_a}"
+        n = 0
+        @sumtcat = Array.new(@cat_size) { |i| i = 0 }
+        until n == @cat_size
+          @tcat = 0
+          @cat = Array.new(@cat_size) { |i| i = 0 }
+          @cat[n] += report[n].sunday if report[n].sunday
+          @cat[n] += report[n].monday if report[n].monday
+          @cat[n] += report[n].tuesday if report[n].tuesday
+          @cat[n] += report[n].wednesday if report[n].wednesday
+          @cat[n] += report[n].thursday if report[n].thursday
+          @cat[n] += report[n].friday if report[n].friday
+          @cat[n] += report[n].saturday if report[n].saturday
+          @cat.each {|i| @tcat += i }
+          @sumtcat[n] += @tcat
+          n += 1
+          puts "TOTAL for CATEGORY #{n}: #{@tcat}"
+        end
+        puts "SUM TOTAL for REPORT: #{@sumtcat}"
+
+        n = 0
+        until n == @cat_size
+          @tsumtcat[n] += @sumtcat[n]
+          n += 1
+        end
+        puts "TOTAL SUM OF ALL REPORTS: #{@tsumtcat}"
+      end
+      @date = @date_custom if @date_custom
+      @reports = Report.where("user_id = ? AND created_at >= ?", params[:user_id], @date)
+      @hours = Array.new
+      @reports.each do |report|
+        @hours.push(Hour.where(report_id: report.id))
+      end
+
+
     # reports filter for a team
     elsif params[:team_id]
       @team_users = User.where("team_id = ?", params[:team_id])
@@ -130,7 +171,9 @@ class StatsController < ApplicationController
 
     # time calculation
     @total_hours = 0
+
     @hours.each do |report|
+      puts "REPORT : #{report.to_a}"
       report.each do |hour|
         p hour.sunday
         @total_hours += hour.sunday if hour.sunday
@@ -144,6 +187,7 @@ class StatsController < ApplicationController
       end
     end
     puts "Total hours after cycle: #{@total_hours}"
+
 
   end
 

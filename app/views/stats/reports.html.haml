@@ -9,30 +9,24 @@
     %tr
       %th Category
       %th Hours
-    - n = 0
-    - @reports = Report.where("user_id = ?", params[:user_id])
-    - @hours = Array.new
-    - @reports.each do |report|
-      - @hours.push(Hour.where(report_id: report.id))
-    - @hours.each do |hour|
-      - puts hour[n].inspect
-      %tr
-        %td= Category.find(hour.to_a[n].category_id).name
-        - @h = 0
-        - hour.each do |hh|
-          - @h += hh.sunday if hh.sunday
-          - @h += hh.monday if hh.monday
-          - @h += hh.tuesday if hh.tuesday
-          - @h += hh.wednesday if hh.wednesday
-          - @h += hh.thursday if hh.thursday
-          - @h += hh.friday if hh.friday
-          - @h += hh.saturday if hh.saturday
-        %td= @h
-      - n+=1
+
+    - @total_hours = 0
+    - @n = 0
+    - until @n == @cat_size
+      - puts @hours[@n].inspect
+      - @hours[@n].to_a.each do |day|
+        - @th = 0
+        - if day.category_id
+          - puts "CATEGORY =========== #{day.category_id}"
+          %tr
+            %td= Category.find(day.category_id).name
+            %td= @tsumtcat[@n]
+            - @n+=1
     %tr
       %td
         %b= "Total hours"
       %td
+        - @tsumtcat.each {|i| @total_hours += i}
         %b= @total_hours
 - elsif params[:team_id]
   %table.table
@@ -68,8 +62,6 @@
     %tr
       %td All
       %td= @total_hours
-  -#  %p.lead= "Total hours for all users, teams and categories: #{@total_hours}"
-  -#  %hr
 - else
   - puts "condition_catched!"
   - puts params
