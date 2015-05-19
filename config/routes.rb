@@ -5,14 +5,14 @@ Rails.application.routes.draw do
   resources :stats
   get 'stats/user' => 'stats#user'
   post 'stats/user' => 'stats#reports'
-  get 'stats/users' => 'stats#users'
-  post 'stats/users' => 'stats#reports'
+  get 'stats/team_category' => 'stats#team_category'
+  post 'stats/team_category' => 'stats#reports'
   get 'stats/team' => 'stats#team'
   post 'stats/team' => 'stats#reports'
   get 'stats/category' => 'stats#category'
   post 'stats/category' => 'stats#reports'
-  get 'stats/categories' => 'stats#categories'
-  post 'stats/categories' => 'stats#reports'
+  get 'stats/all' => 'stats#all'
+  post 'stats/all' => 'stats#reports'
 
 
   resources :reports

@@ -1,6 +1,77 @@
-.container
-  .row
-    .col-md-5
-      %p.lead= "Total hours: #{@total_hours}"
-      %hr
-= params
+%p.lead{:align => "center"}= "Stats for a time period from #{@date_custom.strftime('%m/%d/%Y')}" if @date_custom
+%p.lead{:align => "center"}= "Stats for a time period from #{@date.strftime('%m/%d/%Y')}" if @date
+%hr
+%br/
+
+- if params[:user_id]
+  %p.lead= "#{User.find(params[:user_id]).first_name} #{User.find(params[:user_id]).last_name}"
+  %table.table
+    %tr
+      %th Category
+      %th Hours
+    - n = 0
+    - @reports = Report.where("user_id = ?", params[:user_id])
+    - @hours = Array.new
+    - @reports.each do |report|
+      - @hours.push(Hour.where(report_id: report.id))
+    - @hours.each do |hour|
+      - puts hour[n].inspect
+      %tr
+        %td= Category.find(hour.to_a[n].category_id).name
+        - @h = 0
+        - hour.each do |hh|
+          - @h += hh.sunday if hh.sunday
+          - @h += hh.monday if hh.monday
+          - @h += hh.tuesday if hh.tuesday
+          - @h += hh.wednesday if hh.wednesday
+          - @h += hh.thursday if hh.thursday
+          - @h += hh.friday if hh.friday
+          - @h += hh.saturday if hh.saturday
+        %td= @h
+      - n+=1
+    %tr
+      %td
+        %b= "Total hours"
+      %td
+        %b= @total_hours
+- elsif params[:team_id]
+  %table.table
+    %tr
+      %th Team
+      %th Total hours
+    %tr
+      %td= Team.find(params[:team_id]).name
+      %td= @total_hours
+- elsif params[:team_category_id] or params[:category_team_id]
+  %table.table
+    %tr
+      %th Team
+      %th Category
+      %th Total hours
+    %tr
+      %td= Team.find(params[:team_category_id]).name
+      %td= Category.find(params[:category_team_id]).name
+      %td= @total_hours
+- elsif params[:category_id]
+  %table.table
+    %tr
+      %th Category
+      %th Total hours
+    %tr
+      %td= Category.find(params[:category_id]).name
+      %td= @total_hours
+- elsif params[:all]
+  %table.table
+    %tr
+      %th Users, teams and categories
+      %th Total hours
+    %tr
+      %td All
+      %td= @total_hours
+  -#  %p.lead= "Total hours for all users, teams and categories: #{@total_hours}"
+  -#  %hr
+- else
+  - puts "condition_catched!"
+  - puts params
+
+
