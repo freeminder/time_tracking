@@ -78,6 +78,16 @@ class ReportsController < ApplicationController
   end
 
 
+  def sign
+    @report = Report.where(id: params[:id]).first
+    @report.update_attributes(signed: true)
+
+    # save global variable for Previous and Next navigation
+    $report_id = params[:id]
+    redirect_to reports_path
+  end
+
+
   def search
     # selected time range
     if params[:date_custom] != ""

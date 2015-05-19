@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   post 'reports/create' => 'reports#create'
   get 'reports/:id/export' => 'reports#export'
   post 'reports/search' => 'reports#search'
+  get 'reports/:id/sign' => 'reports#sign'
 
   resources :categories
   get 'categories/:id/destroy' => 'categories#destroy'

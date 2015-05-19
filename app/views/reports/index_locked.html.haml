@@ -99,7 +99,8 @@
 
     %tr
       %td.tg-vn4c
-        %b Signature
+        %b= "Signed" if @report.signed == true
+        %b= link_to "Sign", "/reports/#{$report_id}/sign" if @report.signed == false
       %td.tg-vn4c
         %b= "Days Total: "
       %td.tg-vv7f
