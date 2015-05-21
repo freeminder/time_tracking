@@ -1,14 +1,19 @@
 %p.lead{:align => "center"}= "Stats for a time period from #{@date_custom.strftime('%m/%d/%Y')}" if @date_custom
+- $date = @date_custom.strftime('%m/%d/%Y') if @date_custom
 %p.lead{:align => "center"}= "Stats for a time period from #{@date.strftime('%m/%d/%Y')}" if @date
+- $date = @date.strftime('%m/%d/%Y') if @date
 %hr
 %br/
 
 - if params[:user_id]
+  - $user_rate = User.find(params[:user_id]).rate
   %p.lead= "#{User.find(params[:user_id]).first_name} #{User.find(params[:user_id]).last_name}"
   %table.table
     %tr
       %th Category
       %th Hours
+      %th Hourly pay
+      %th Amount per project
 
     - @total_hours = 0
     - @n = 0
@@ -21,13 +26,22 @@
           %tr
             %td= Category.find(day.category_id).name
             %td= @tsumtcat[@n]
+            %td= User.find(params[:user_id]).rate if @tsumtcat[@n] != 0
+            %td= @tsumtcat[@n] * User.find(params[:user_id]).rate if @tsumtcat[@n] != 0
             - @n+=1
     %tr
       %td
         %b= "Total hours"
       %td
         - @tsumtcat.each {|i| @total_hours += i}
+        - $tsumtcat = @tsumtcat
         %b= @total_hours
+        - $total_hours = @total_hours
+      %td
+      %td
+  %hr
+  %div{:align => "right"}= link_to 'Export', "/stats/export_user", class: 'btn btn-primary'
+
 - elsif params[:team_id]
   %table.table
     %tr
@@ -35,7 +49,12 @@
       %th Total hours
     %tr
       %td= Team.find(params[:team_id]).name
+      - $team = Team.find(params[:team_id]).name
       %td= @total_hours
+      - $total_hours = @total_hours
+  %hr
+  %div{:align => "right"}= link_to 'Export', "/stats/export_team", class: 'btn btn-primary'
+
 - elsif params[:team_category_id] or params[:category_team_id]
   %table.table
     %tr
@@ -44,8 +63,14 @@
       %th Total hours
     %tr
       %td= Team.find(params[:team_category_id]).name
+      - $team = Team.find(params[:team_category_id]).name
       %td= Category.find(params[:category_team_id]).name
+      - $category = Category.find(params[:category_team_id]).name
       %td= @total_hours
+      - $total_hours = @total_hours
+  %hr
+  %div{:align => "right"}= link_to 'Export', "/stats/export_team_category", class: 'btn btn-primary'
+
 - elsif params[:category_id]
   %table.table
     %tr
@@ -53,7 +78,12 @@
       %th Total hours
     %tr
       %td= Category.find(params[:category_id]).name
+      - $category = Category.find(params[:category_id]).name
       %td= @total_hours
+      - $total_hours = @total_hours
+  %hr
+  %div{:align => "right"}= link_to 'Export', "/stats/export_category", class: 'btn btn-primary'
+
 - elsif params[:all]
   %table.table
     %tr
@@ -62,6 +92,10 @@
     %tr
       %td All
       %td= @total_hours
+      - $total_hours = @total_hours
+  %hr
+  %div{:align => "right"}= link_to 'Export', "/stats/export_all", class: 'btn btn-primary'
+
 - else
   - puts "condition_catched!"
   - puts params

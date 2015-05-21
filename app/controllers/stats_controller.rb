@@ -6,6 +6,14 @@ class StatsController < ApplicationController
   def index
   end
 
+  # def export
+  #   if render xlsx: "export", template: "stats/export"
+  #     flash[:notice] = 'Report has been successfully exported!'
+  #   else
+  #     flash[:error] = 'Something goes wrong!'
+  #   end
+  # end
+
 
   def show
     @teams = Team.all
@@ -35,6 +43,16 @@ class StatsController < ApplicationController
       render 'category'
     elsif params[:id] == 'all'
       render 'all'
+    elsif params[:id] == 'export_user'
+      render xlsx: "export", template: "stats/export_user"
+    elsif params[:id] == 'export_team'
+      render xlsx: "export", template: "stats/export_team"
+    elsif params[:id] == 'export_team_category'
+      render xlsx: "export", template: "stats/export_team_category"
+    elsif params[:id] == 'export_category'
+      render xlsx: "export", template: "stats/export_category"
+    elsif params[:id] == 'export_all'
+      render xlsx: "export", template: "stats/export_all"
     else
       puts "condition_catched!"
     end

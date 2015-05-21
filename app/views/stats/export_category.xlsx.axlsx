@@ -1,0 +1,54 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Reports") do |sheet|
+  header_center = wb.styles.add_style(:b=>true, :bg_color=>"AABCFE",
+                             :fg_color=>"003399",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+  header_right = wb.styles.add_style(:bg_color=>"AABCFE",
+                             :fg_color=>"003399",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :right})
+  bold_center = wb.styles.add_style(:b=>true, :bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+  bold_right = wb.styles.add_style(:b=>true, :bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :right})
+  regular_center = wb.styles.add_style(:bg_color=>"e8edff",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+  regular_left = wb.styles.add_style(:bg_color=>"e8edff",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :left})
+  signature_left = wb.styles.add_style(:b=>true, :bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :left})
+  total_regular_center = wb.styles.add_style(:bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :left})
+  total_bold_center = wb.styles.add_style(:b=>true, :bg_color=>"d2e4fc",
+                             :fg_color=>"666699",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+
+  sheet.add_row ["Stats for a time period from #{$date}", ""],
+    :widths=>[45, 45],
+    :style=>[header_center, header_center]
+  sheet.add_row ["Category", "Total hours"],
+    :widths=>[45, 45],
+    :style=>[ bold_center, bold_center]
+  sheet.add_row [$category, $total_hours],
+    :widths=>[45, 45],
+    :style=>[regular_center, regular_center]
+
+  sheet.merge_cells "A1:B1"
+
+
+end
+

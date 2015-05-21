@@ -5,11 +5,14 @@
 			%hr
 			%div{:align => "right"}
 				= "Member since #{l @user.created_at.to_date, format: :short}"
-				%hr
-				= "Member of "
-				= link_to @user.team.name, team_path(@user.team) if @user.team
-				= "no one" if @user.team == nil
-				= " team"
-				%hr
-				= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger' if current_user.admin?
-				= link_to 'Edit', edit_user_path, class: 'btn btn-success' if current_user.admin?
+				- if current_user.admin?
+					%hr
+					= "Member of "
+					= link_to @user.team.name, team_path(@user.team) if @user.team
+					= "no one" if @user.team == nil
+					= " team"
+					%hr
+					= "Hourly rate: #{@user.rate}"
+					%hr
+					= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger'
+					= link_to 'Edit', edit_user_path, class: 'btn btn-success'

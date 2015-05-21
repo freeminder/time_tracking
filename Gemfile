@@ -34,6 +34,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # XLSX
 gem 'axlsx_rails'
 
+# Scheduler for mail
+gem 'delayed_job_active_record'
+# gem 'resque'
+# gem 'resque_mailer'
+# gem 'resque-scheduler'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
