@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150520235900) do
+ActiveRecord::Schema.define(version: 20150523233042) do
 
   create_table "categories", force: :cascade do |t|
     t.string  "name",      limit: 255
@@ -27,6 +27,22 @@ ActiveRecord::Schema.define(version: 20150520235900) do
 
   add_index "categories_reports", ["category_id", "report_id"], name: "index_categories_reports_on_category_id_and_report_id", using: :btree
   add_index "categories_reports", ["report_id", "category_id"], name: "index_categories_reports_on_report_id_and_category_id", using: :btree
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   limit: 4,     default: 0, null: false
+    t.integer  "attempts",   limit: 4,     default: 0, null: false
+    t.text     "handler",    limit: 65535,             null: false
+    t.text     "last_error", limit: 65535
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by",  limit: 255
+    t.string   "queue",      limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "hours", force: :cascade do |t|
     t.integer "sunday",      limit: 4
@@ -44,13 +60,15 @@ ActiveRecord::Schema.define(version: 20150520235900) do
   add_index "hours", ["report_id"], name: "index_hours_on_report_id", using: :btree
 
   create_table "reports", force: :cascade do |t|
-    t.string   "name",        limit: 255
+    t.string   "name",             limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id",     limit: 4
-    t.integer  "category_id", limit: 4
-    t.integer  "week_id",     limit: 4
-    t.boolean  "signed",      limit: 1,   default: false
+    t.integer  "user_id",          limit: 4
+    t.integer  "category_id",      limit: 4
+    t.integer  "week_id",          limit: 4
+    t.boolean  "signed",           limit: 1,   default: false
+    t.boolean  "timesheet_ready",  limit: 1,   default: false
+    t.boolean  "timesheet_locked", limit: 1,   default: false
   end
 
   add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree

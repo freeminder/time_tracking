@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   post 'stats/category' => 'stats#reports'
   get 'stats/all' => 'stats#all'
   post 'stats/all' => 'stats#reports'
-  get 'stats/export' => 'stats#export'
 
 
   resources :reports

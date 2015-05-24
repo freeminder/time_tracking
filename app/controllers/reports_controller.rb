@@ -16,31 +16,13 @@ class ReportsController < ApplicationController
       @week_end   = DateTime.parse(Report.find($report_id).created_at.to_s).end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
 
       # current week, landing from show method
-      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ?",
-                                     current_user.id, Report.find($report_id), @week_id).count == 1
+      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ? AND timesheet_ready = ?",
+                                     current_user.id, Report.find($report_id), @week_id, false).count == 1
       # previous week locked, landing from show method
-      render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
-                                            current_user.id, Report.find($report_id), @week_id).count >= 1
+      # render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
+      #                                       current_user.id, Report.find($report_id), @week_id).count >= 1
+      render 'index_locked' if Report.where(user_id: current_user.id, id: $report_id, timesheet_ready: true).count >= 1
       $report_id = nil
-
-    elsif Report.where("user_id = ? AND week_id = ?", current_user.id, @week_id).count == 0
-      @week_begin = Date.today.beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
-      @week_end   = Date.today.end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
-
-      @previous = Report.where(["user_id = ? AND week_id < ?", current_user.id, @week_id]).last
-
-      @hours = Hour.all
-      @categories = Category.all
-      @report = Report.new
-
-
-      @report.categories = @categories.map { |x| Category.new name: x.name }
-      @report.categories.build
-      @report.hours.build
-
-      # new week or first time
-      $report_id = nil
-      render 'index_new'
 
     elsif $report_id.nil? and Report.last.id and Report.where("user_id = ? AND id = ?",
                                                               current_user.id, Report.last.id).count == 1
@@ -49,13 +31,17 @@ class ReportsController < ApplicationController
 
       @previous = Report.where(["user_id = ? AND id < ?", current_user.id, @report.id]).last
       @next     = Report.where(["user_id = ? AND id > ?", current_user.id, @report.id]).first
+      @week_begin = DateTime.parse(Report.find(@report.id).created_at.to_s).beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_end   = DateTime.parse(Report.find(@report.id).created_at.to_s).end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
 
       # current week, landing from restored session
-      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ?",
-                                     current_user.id, Report.find(@report.id), @week_id).count == 1
+      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ? AND timesheet_ready = ?",
+                                     current_user.id, Report.find(@report.id), @week_id, false).count == 1
       # previous week locked, landing from restored session
-      render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
-                                            current_user.id, Report.find(@report.id), @week_id).count >= 1
+      # render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
+      #                                       current_user.id, Report.find(@report.id), @week_id).count >= 1
+      render 'index_locked' if Report.where(user_id: current_user.id, id: @report.id, timesheet_ready: true).count >= 1
+
 
     else
     end

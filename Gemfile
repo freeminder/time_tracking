@@ -36,6 +36,8 @@ gem 'axlsx_rails'
 
 # Scheduler for mail
 gem 'delayed_job_active_record'
+gem 'daemons'
+gem 'whenever', :require => false
 # gem 'resque'
 # gem 'resque_mailer'
 # gem 'resque-scheduler'
