@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150523233042) do
+ActiveRecord::Schema.define(version: 20150524200044) do
 
   create_table "categories", force: :cascade do |t|
     t.string  "name",      limit: 255
@@ -60,15 +60,14 @@ ActiveRecord::Schema.define(version: 20150523233042) do
   add_index "hours", ["report_id"], name: "index_hours_on_report_id", using: :btree
 
   create_table "reports", force: :cascade do |t|
-    t.string   "name",             limit: 255
+    t.string   "name",            limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id",          limit: 4
-    t.integer  "category_id",      limit: 4
-    t.integer  "week_id",          limit: 4
-    t.boolean  "signed",           limit: 1,   default: false
-    t.boolean  "timesheet_ready",  limit: 1,   default: false
-    t.boolean  "timesheet_locked", limit: 1,   default: false
+    t.integer  "user_id",         limit: 4
+    t.integer  "category_id",     limit: 4
+    t.integer  "week_id",         limit: 4
+    t.boolean  "signed",          limit: 1,   default: false
+    t.boolean  "timesheet_ready", limit: 1,   default: false
   end
 
   add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree

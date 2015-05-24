@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
 
   def self.lock_timesheets
     current_week = Date.today.strftime("%U").to_i
-    @reports = Report.where(timesheet_ready: false, week_id: current_week-1)
+    @reports = Report.where(timesheet_ready: false).where.not(week_id: current_week)
     @reports.each do |report|
       @hour = 0
       Hour.where(report_id: report.id) do |hour|
@@ -40,7 +40,8 @@ class User < ActiveRecord::Base
   end
 
   def self.timesheet_not_ready_notify
-    @reports = Report.where(timesheet_ready: false)
+    current_week = Date.today.strftime("%U").to_i
+    @reports = Report.where(timesheet_ready: false).where.not(week_id: current_week)
     @users = Array.new
     @reports.each { |report| @users.push(User.find(report.user_id)) }
     @users.uniq!.each do |user|

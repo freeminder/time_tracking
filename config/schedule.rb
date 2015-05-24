@@ -7,14 +7,22 @@
 
 # set :environment, :development
 
-every :monday, :at => '3:59 pm' do # Use any day of the week or :weekend, :weekday
-  runner "User.lock_timesheets"
-  # rake "jobs:work"
+
+every :sunday, :at => '0:01 am' do # Use any day of the week or :weekend, :weekday
+  runner "User.create_new_timesheets"
 end
 
-every :weekday, :at => '4:00 pm' do # Use any day of the week or :weekend, :weekday
+every :monday, :at => '4:00 pm' do # Use any day of the week or :weekend, :weekday
+  runner "User.lock_timesheets"
+end
+
+every :weekday, :at => '0:00 am' do # Use any day of the week or :weekend, :weekday
+  runner "User.lock_timesheets"
+end
+
+
+every :weekday, :at => '4:01 pm' do # Use any day of the week or :weekend, :weekday
   runner "User.timesheet_not_ready_notify"
-  # rake "jobs:work"
 end
 
 # every 2.minutes do

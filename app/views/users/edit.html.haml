@@ -12,6 +12,7 @@
 					= f.input :password, hint: false, error_html: { id: 'password_error'}
 					= f.input :password_confirmation, label: false
 					= f.input :team_id, :as => :select, collection: @teams, prompt: "Select team"
+					= f.input :rate, :as => :integer, label_html: { class: 'my_class' }
 					%div{:align => "right"}
 						%b Admin
 						= f.input_field :admin, as: :boolean, boolean_style: :inline
