@@ -1,6 +1,6 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Reports") do |sheet|
-  header_center = wb.styles.add_style(:b=>true,
+  header_center = wb.styles.add_style(:b=>true, :bg_color=>"FFFF00",
                              :fg_color=>"000000",
                              :border=>Axlsx::STYLE_THIN_BORDER,
                              :alignment=>{:horizontal => :center})
@@ -8,6 +8,14 @@ wb.add_worksheet(name: "Reports") do |sheet|
                              :fg_color=>"000000",
                              :border=>Axlsx::STYLE_THIN_BORDER,
                              :alignment=>{:horizontal => :right})
+  lemon_bold = wb.styles.add_style(:b=>true, :bg_color=>"FFF8C6",
+                             :fg_color=>"000000",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
+  lemon_regular = wb.styles.add_style(:bg_color=>"FFF8C6",
+                             :fg_color=>"000000",
+                             :border=>Axlsx::STYLE_THIN_BORDER,
+                             :alignment=>{:horizontal => :center})
   bold_center = wb.styles.add_style(:b=>true,
                              :fg_color=>"000000",
                              :border=>Axlsx::STYLE_THIN_BORDER,
@@ -36,22 +44,50 @@ wb.add_worksheet(name: "Reports") do |sheet|
                              :fg_color=>"000000",
                              :border=>Axlsx::STYLE_THIN_BORDER,
                              :alignment=>{:horizontal => :center})
-  lemon_bold = wb.styles.add_style(:b=>true, :bg_color=>"FFF8C6",
+  blue_1 = wb.styles.add_style(:b=>true, :bg_color=>"1E1E9E",
                              :fg_color=>"000000",
                              :border=>Axlsx::STYLE_THIN_BORDER,
                              :alignment=>{:horizontal => :center})
+  space_between_stats = wb.styles.add_style(
+                             :fg_color=>"000000",
+                             :alignment=>{:horizontal => :center})
 
-  sheet.add_row ["Stats for a time period from #{$date}", ""],
-    :widths=>[45, 45],
-    :style=>[lemon_bold, lemon_bold]
-  sheet.add_row ["Category", "Total hours"],
-    :widths=>[45, 45],
-    :style=>[ bold_center, bold_center]
-  sheet.add_row [$category, $total_hours],
-    :widths=>[45, 45],
-    :style=>[regular_center, regular_center]
+  n = 3
+  total_hours = 0
 
-  sheet.merge_cells "A1:B1"
+  sheet.add_row ["Category:", $category, "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[header_right, header_center, header_right, header_right, header_right]
+  sheet.add_row ["Stats for a time period from #{$date}", "", "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[lemon_bold, lemon_bold, lemon_bold, lemon_bold, lemon_bold]
+  sheet.add_row ["User", "", "Hours", "Hourly pay", "Amount per project"],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[bold_center, bold_center, lemon_bold, lemon_bold, lemon_bold]
+
+
+  $users_arr.each do |user|
+    user_rate = User.find(user[:user_id]).rate
+    user_fullname = "#{User.find(user[:user_id]).first_name} #{User.find(user[:user_id]).last_name}"
+
+    sheet.add_row [user_fullname, "", user[:hours], "#{user_rate if user[:hours] > 0}", "= C#{n+1} * D#{n+1}"],
+      :widths=>[45, 30, 20, 15, 20],
+      :style=>[regular_left, regular_center, lemon_regular, lemon_regular, lemon_regular]
+    total_hours += user[:hours]
+    n += 1
+  end
+
+
+  sheet.add_row ["", "", "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[blue_1, blue_1, blue_1, blue_1, blue_1]
+  sheet.add_row ["Total", "", "=SUM(C4:C#{n})", "", "=SUM(E4:E#{n})"],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[signature_left, total_regular_center, lemon_bold, lemon_bold, lemon_bold]
+
+  sheet.merge_cells "B1:C1"
+  sheet.merge_cells "D1:E1"
+  sheet.merge_cells "A2:E2"
 
 
 end

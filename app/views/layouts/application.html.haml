@@ -1,7 +1,8 @@
 !!!
 %html
 	%head
-		%title DPI Time Tracking
+		%title Time Tracking
+		%link{:href => "http://fonts.googleapis.com/css?family=Cookie", :rel => "stylesheet", :type => "text/css"}
 		= stylesheet_link_tag 'application', media: :all
 		= javascript_include_tag 'application'
 	%body
@@ -13,7 +14,7 @@
 						%span.icon-ba
 						%span.icon-ba
 						%span.icon-ba
-					%a.navbar-brand{href: '/'} DPI Time Tracking
+					%a.navbar-brand{href: '/'} Time Tracking
 				.collapse.navbar-collapse#bs-example-navbar-collapse-1
 					%ul.nav.navbar-nav
 						- if current_user

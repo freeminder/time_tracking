@@ -9,13 +9,12 @@
 					= f.input :email, label_html: { class: 'my_class' }
 					= f.input :first_name, label_html: { class: 'my_class' }
 					= f.input :last_name, label_html: { class: 'my_class' }
-					= f.input :password, hint: false, error_html: { id: 'password_error'}
-					= f.input :password_confirmation, label: false
 					= f.input :team_id, :as => :select, collection: @teams, prompt: "Select team"
-					= f.input :rate, :as => :integer, label_html: { class: 'my_class' }
+					= f.input :rate, as: :integer, label_html: { class: 'my_class' }, input_html: { min: '0', max: '200', step: 'any' }
 					%div{:align => "right"}
 						%b Admin
 						= f.input_field :admin, as: :boolean, boolean_style: :inline
 				.form-actions
+					= link_to 'Go back', :back, class: 'btn btn-primary'
 					= link_to 'Delete', "/users/#{@user.id}/destroy", class: 'btn btn-danger'
 					= f.button :submit, "Update", class: 'btn btn-success'

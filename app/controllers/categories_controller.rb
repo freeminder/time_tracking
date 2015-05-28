@@ -20,6 +20,10 @@ class CategoriesController < ApplicationController
     @category = Category.new(category_params)
     @categories = Category.all
     if @category.save
+      Report.all.each do |report|
+        # if Hour.where(report_id: report.id, category_id: @category.id).count == 0
+        Hour.create(report_id: report.id, category_id: @category.id)
+      end
       flash[:success] = "Category has been successfully created!"
       redirect_to @category
     else

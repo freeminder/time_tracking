@@ -5,8 +5,6 @@ Rails.application.routes.draw do
   resources :stats
   get 'stats/user' => 'stats#user'
   post 'stats/user' => 'stats#reports'
-  get 'stats/team_category' => 'stats#team_category'
-  post 'stats/team_category' => 'stats#reports'
   get 'stats/team' => 'stats#team'
   post 'stats/team' => 'stats#reports'
   get 'stats/category' => 'stats#category'
@@ -27,7 +25,8 @@ Rails.application.routes.draw do
   resources :teams
   get 'teams/:id/destroy' => 'teams#destroy'
 
-  devise_for :users
+  # devise_for :users
+  devise_for :users, controllers: {registrations: 'registrations'}
   resources :users
   get 'users/:id/destroy' => 'users#destroy'
   # The priority is based upon order of creation: first created -> highest priority.

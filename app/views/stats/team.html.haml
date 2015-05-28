@@ -1,7 +1,7 @@
 .container
   .row
     .col-md-5
-      %p.lead= "Single team for all categories over a specified time period"
+      %p.lead= "Single team over a specified time period"
       %hr
       = form_tag("", method: "post") do
         .form-group
@@ -31,5 +31,6 @@
 
           %hr
           %div{:align => "right"}
+            = link_to 'Go back', :back, class: 'btn btn-primary'
             = submit_tag("Generate stats", class: 'btn btn-success')
 

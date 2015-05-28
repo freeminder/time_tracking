@@ -1,10 +1,21 @@
 class ReportsController < ApplicationController
 
   before_action :correct_report, only: [:show, :edit, :update, :destroy]
-  before_action :correct_week, only: [:index, :show, :update]
+  before_action :current_week, only: [:index, :show, :update]
 
 
   def index
+    @total = Hash[
+      "hours" => 0,
+      "Sunday_hours" => 0,
+      "Monday_hours" => 0,
+      "Tuesday_hours" => 0,
+      "Wednesday_hours" => 0,
+      "Thursday_hours" => 0,
+      "Friday_hours" => 0,
+      "Saturday_hours" => 0
+    ]
+
     if $report_id and Report.where("user_id = ? AND id = ?",
                                    current_user.id, Report.find($report_id)).count == 1
       @hours = Hour.where(report_id: $report_id)
@@ -12,40 +23,61 @@ class ReportsController < ApplicationController
 
       @previous = Report.where(["user_id = ? AND id < ?", current_user.id, @report.id]).last
       @next     = Report.where(["user_id = ? AND id > ?", current_user.id, @report.id]).first
-      @week_begin = DateTime.parse(Report.find($report_id).created_at.to_s).beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
-      @week_end   = DateTime.parse(Report.find($report_id).created_at.to_s).end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      # @week_begin = DateTime.parse(Report.find($report_id).created_at.to_s).beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_begin = Date.commercial(@report.created_at.strftime("%Y").to_i, @report.week_id, 7).strftime("%m/%d/%Y")
+      # @week_end   = DateTime.parse(Report.find($report_id).created_at.to_s).end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_end = Date.commercial(@report.created_at.strftime("%Y").to_i, @report.week_id+1, 6).strftime("%m/%d/%Y")
 
       # current week, landing from show method
-      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ? AND timesheet_ready = ?",
+      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ? AND timesheet_locked = ?",
                                      current_user.id, Report.find($report_id), @week_id, false).count == 1
       # previous week locked, landing from show method
       # render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
       #                                       current_user.id, Report.find($report_id), @week_id).count >= 1
-      render 'index_locked' if Report.where(user_id: current_user.id, id: $report_id, timesheet_ready: true).count >= 1
+      render 'index_locked' if Report.where(user_id: current_user.id, id: $report_id, timesheet_locked: true).count >= 1
       $report_id = nil
 
-    elsif $report_id.nil? and Report.last.id and Report.where("user_id = ? AND id = ?",
-                                                              current_user.id, Report.last.id).count == 1
-      @hours = Hour.where(report_id: Report.last.id)
-      @report = Report.find(Report.last.id)
+    elsif $report_id.nil? and Report.where(user_id: current_user.id).count >= 1
+      @report = Report.where(user_id: current_user.id).last
+      @hours = Hour.where(report_id: @report.id)
 
       @previous = Report.where(["user_id = ? AND id < ?", current_user.id, @report.id]).last
       @next     = Report.where(["user_id = ? AND id > ?", current_user.id, @report.id]).first
-      @week_begin = DateTime.parse(Report.find(@report.id).created_at.to_s).beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
-      @week_end   = DateTime.parse(Report.find(@report.id).created_at.to_s).end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      # @week_begin = DateTime.parse(Report.find(@report.id).created_at.to_s).beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_begin = Date.commercial(@report.created_at.strftime("%Y").to_i, @report.week_id, 7).strftime("%m/%d/%Y")
+      # @week_end   = DateTime.parse(Report.find(@report.id).created_at.to_s).end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_end = Date.commercial(@report.created_at.strftime("%Y").to_i, @report.week_id+1, 6).strftime("%m/%d/%Y")
 
       # current week, landing from restored session
-      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ? AND timesheet_ready = ?",
+      render 'index' if Report.where("user_id = ? AND id = ? AND week_id = ? AND timesheet_locked = ?",
                                      current_user.id, Report.find(@report.id), @week_id, false).count == 1
       # previous week locked, landing from restored session
       # render 'index_locked' if Report.where("user_id = ? AND id = ? AND week_id < ?",
       #                                       current_user.id, Report.find(@report.id), @week_id).count >= 1
-      render 'index_locked' if Report.where(user_id: current_user.id, id: @report.id, timesheet_ready: true).count >= 1
-
+      render 'index_locked' if Report.where(user_id: current_user.id, id: @report.id, timesheet_locked: true).count >= 1
 
     else
+      @week_begin = Date.today.beginning_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+      @week_end   = Date.today.end_of_week(start_day = :sunday).strftime('%m/%d/%Y')
+
+      @previous = Report.where(["user_id = ? AND week_id < ?", current_user.id, @week_id]).last
+
+      @hours = Hour.all
+      @categories = Category.all
+      @report = Report.new(created_at: Time.now, week_id: Time.now.strftime('%U'))
+
+
+      @report.categories = @categories.map { |x| Category.new name: x.name }
+      @report.categories.build
+      @report.hours.build
+
+      # new week or first time
+      $report_id = nil
+      render 'index_new'
     end
+
   end
+
 
   def show
     @categories = Category.all
@@ -127,6 +159,7 @@ class ReportsController < ApplicationController
         n+=1
       end
       @report.update_attributes(week_id: @week_id) if @report.week_id == nil
+      @report.update_attributes(signed: true) if @report.signed == false
 
 
 
@@ -165,7 +198,7 @@ private
     @report = Report.find(params[:id])
   end
 
-  def correct_week
+  def current_week
     # %U - Week number of the year. The week starts with Sunday. (00..53)
     # %W - Week number of the year. The week starts with Monday. (00..53)
     @week_id = Date.today.strftime("%U").to_i

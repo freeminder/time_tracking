@@ -28,7 +28,15 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @teams = Team.all
     if @user.save
+      # create empty report for the new user
+      current_week = Date.today.strftime("%U").to_i
+      @report = Report.create(user_id: @user.id, week_id: current_week)
+      Category.all.each do |category|
+        Hour.create(category_id: category.id, report_id: @report.id)
+      end
+      # show success popup
       flash[:success] = "User has been successfully created!"
+      # redirect and show user's profile
       redirect_to @user
     else
       render 'new'

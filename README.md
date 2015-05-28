@@ -1,17 +1,30 @@
-# DPI Time Tracking
+# Time Tracking
 
 Time tracking web application.
 
-# Installation
 ## Requirements
 
 * **Ruby >= 1.9.3**
 * **Bundler**
+* **MySQL server**
 
-To install the dependencies, run bundle in the root dir:
+## Setup dev env
 
-    bundle
+Clone `.env.example` to `.env` and update the environment variables with your local settings (use strings).
 
+Then run:
+```
+bundle
+rails db:setup
+```
+This will run database creation, migration and seeds.
+
+## Background jobs
+
+Run:
+```
+bundle exec rake jobs:work
+```
 
 ## License
 

@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module DPITimeTracking
+module TimeTracking
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -24,14 +24,6 @@ module DPITimeTracking
     config.active_record.raise_in_transactional_callbacks = true
     
     config.active_job.queue_adapter = :delayed_job
-
-    config.before_configuration do
-      env_file = File.join(Rails.root, 'config', 'local_env.yml')
-      YAML.load(File.open(env_file)).each do |key, value|
-        value = value.to_json if value.kind_of? Hash
-        ENV[key.to_s] = value
-      end if File.exists?(env_file)
-    end
 
     # Mail config
     config.action_mailer.delivery_method = :smtp

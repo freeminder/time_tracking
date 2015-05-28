@@ -50,7 +50,7 @@ wb.add_worksheet(name: "Reports") do |sheet|
                              :alignment=>{:horizontal => :center})
 
 
-  sheet.add_row ["Associate Name:", "#{current_user.first_name} #{current_user.last_name}", "", "", ""],
+  sheet.add_row ["Associate Name:", "#{$user_fullname if $user_fullname}", "", "", ""],
     :widths=>[45, 30, 20, 15, 20],
     :style=>[header_right, header_center, header_right, header_right, header_right]
   sheet.add_row ["Stats for a time period from #{$date}", "", "", "", ""],
@@ -74,7 +74,7 @@ wb.add_worksheet(name: "Reports") do |sheet|
 
 
   # @total_cell = sheet.rows.first.cells.last.index
-  sheet.add_row ["Total hours", "", $total_hours, "", ""],
+  sheet.add_row ["Total", "", "=SUM(C4:C#{n+4})", "", "=SUM(E4:E#{n+4})"],
     :widths=>[45, 30, 20, 15, 20],
     :style=>[signature_left, total_regular_center, lemon_bold, lemon_bold, lemon_bold]
 

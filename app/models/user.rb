@@ -7,7 +7,6 @@ class User < ActiveRecord::Base
   belongs_to :team
   # has_one :report, dependent: :destroy
   has_many :reports, dependent: :delete_all
-  # has_many :categories, dependent: :delete_all
 
 
   def self.create_new_timesheets
@@ -22,10 +21,10 @@ class User < ActiveRecord::Base
 
   def self.lock_timesheets
     current_week = Date.today.strftime("%U").to_i
-    @reports = Report.where(timesheet_ready: false).where.not(week_id: current_week)
+    @reports = Report.where(timesheet_locked: false).where.not(week_id: current_week)
     @reports.each do |report|
       @hour = 0
-      Hour.where(report_id: report.id) do |hour|
+      Hour.where(report_id: report.id).each do |hour|
         @hour += hour.sunday if hour.sunday
         @hour += hour.monday if hour.monday
         @hour += hour.tuesday if hour.tuesday
@@ -34,14 +33,15 @@ class User < ActiveRecord::Base
         @hour += hour.friday if hour.friday
         @hour += hour.saturday if hour.saturday
       end
-      Report.find(report.id).update(timesheet_ready: true) if @hour != 0
-      UserMailer.delay.timesheet_ready_notify(User.find(report.user_id)) if @hour != 0
+      report.update(timesheet_locked: true) if @hour > 0
+      # report.update(signed: true) if report.signed == false
+      UserMailer.delay.timesheet_ready_notify(User.find(report.user_id)) if @hour > 0
     end
   end
 
   def self.timesheet_not_ready_notify
     current_week = Date.today.strftime("%U").to_i
-    @reports = Report.where(timesheet_ready: false).where.not(week_id: current_week)
+    @reports = Report.where(timesheet_locked: false).where.not(week_id: current_week)
     @users = Array.new
     @reports.each { |report| @users.push(User.find(report.user_id)) }
     @users.uniq!.each do |user|
