@@ -1,16 +1,12 @@
 class CreateReports < ActiveRecord::Migration
   def change
     create_table :reports do |t|
-      t.string :name
-    end
+      t.integer :week_id
+      t.boolean :signed, :default => false
+      t.boolean :timesheet_locked, :default => false
 
-    drop_table :categories
-
-    create_table :categories do |t|
-      t.string :name
+      t.timestamps
     end
-    
-    add_reference :categories, :reports, index: true
-    add_reference :reports, :categories, index: true
+    add_reference :reports, :user, index: true
   end
 end

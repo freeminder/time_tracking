@@ -24,21 +24,5 @@ module TimeTracking
     config.active_record.raise_in_transactional_callbacks = true
     
     config.active_job.queue_adapter = :delayed_job
-
-    # Mail config
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-    :address => "localhost",
-    :port => 25,
-    # :domain => "gmail.com",
-    # :authentication => 'plain',
-    :enable_starttls_auto => false,
-    # :user_name => "youremail@gmail.com",
-    # :password => "yourpassword"
-    }
-    config.action_mailer.perform_deliveries = true
-    config.action_mailer.raise_delivery_errors = true
-
-
   end
 end

@@ -9,5 +9,5 @@
 					%br/
 				%hr
 				= link_to 'Go back', :back, class: 'btn btn-primary'
-				= link_to 'Delete', "/teams/#{@team.id}/destroy", class: 'btn btn-danger'
+				= link_to 'Delete', team_path(@team), method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger'
 				= link_to 'Edit', edit_team_path, class: 'btn btn-success'

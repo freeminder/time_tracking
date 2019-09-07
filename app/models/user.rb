@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :team
-  # has_one :report, dependent: :destroy
   has_many :reports, dependent: :delete_all
 
 
@@ -34,7 +33,6 @@ class User < ActiveRecord::Base
         @hour += hour.saturday if hour.saturday
       end
       report.update(timesheet_locked: true) if @hour > 0
-      # report.update(signed: true) if report.signed == false
       UserMailer.delay.timesheet_ready_notify(User.find(report.user_id)) if @hour > 0
     end
   end

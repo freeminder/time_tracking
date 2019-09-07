@@ -104,21 +104,19 @@
         %td.tg-0rnh TOTAL
 
 
-        - @categories = @report.categories.to_a
-        - @categories.pop
-        - @categories.each do |category|
-          = f.simple_fields_for :hours do |ff|
-            %tr
-              %td.tg-031e= category.name
-              %td.tg-031e
-              %td.tg-031e= ff.input :sunday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-              %td.tg-031e= ff.input :monday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-              %td.tg-031e= ff.input :tuesday,   as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-              %td.tg-031e= ff.input :wednesday, as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-              %td.tg-031e= ff.input :thursday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-              %td.tg-031e= ff.input :friday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-              %td.tg-031e= ff.input :saturday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
-              %td.tg-031e
+        = f.simple_fields_for :hours do |ff|
+          %tr
+            %td.tg-031e= ff.object.category.name
+            %td.tg-031e
+            %td.tg-031e= ff.input :sunday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+            %td.tg-031e= ff.input :monday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+            %td.tg-031e= ff.input :tuesday,   as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+            %td.tg-031e= ff.input :wednesday, as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+            %td.tg-031e= ff.input :thursday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+            %td.tg-031e= ff.input :friday,    as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+            %td.tg-031e= ff.input :saturday,  as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any' }
+            %td.tg-031e
+            %td.tg-031e= ff.input :category_id, as: :hidden
 
         %tr
           %td.tg-vn4c

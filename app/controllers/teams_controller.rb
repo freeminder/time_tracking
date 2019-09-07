@@ -1,7 +1,5 @@
 class TeamsController < ApplicationController
-
   before_filter :authorize_admin
-
 
   def index
     @teams = Team.all
@@ -61,10 +59,7 @@ class TeamsController < ApplicationController
   end
 
 private
-
   def team_params
     params.require(:team).permit(:name)
   end
-
-
 end

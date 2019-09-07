@@ -11,22 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528050009) do
+ActiveRecord::Schema.define(version: 20150521204003) do
 
   create_table "categories", force: :cascade do |t|
-    t.string  "name",      limit: 255
-    t.integer "report_id", limit: 4
+    t.string "name", limit: 255
   end
-
-  add_index "categories", ["report_id"], name: "index_categories_on_report_id", using: :btree
-
-  create_table "categories_reports", id: false, force: :cascade do |t|
-    t.integer "category_id", limit: 4, null: false
-    t.integer "report_id",   limit: 4, null: false
-  end
-
-  add_index "categories_reports", ["category_id", "report_id"], name: "index_categories_reports_on_category_id_and_report_id", using: :btree
-  add_index "categories_reports", ["report_id", "category_id"], name: "index_categories_reports_on_report_id_and_category_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   limit: 4,     default: 0, null: false
@@ -60,23 +49,22 @@ ActiveRecord::Schema.define(version: 20150528050009) do
   add_index "hours", ["report_id"], name: "index_hours_on_report_id", using: :btree
 
   create_table "reports", force: :cascade do |t|
-    t.string   "name",             limit: 255
+    t.integer  "week_id",          limit: 4
+    t.boolean  "signed",           limit: 1, default: false
+    t.boolean  "timesheet_locked", limit: 1, default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id",          limit: 4
-    t.integer  "category_id",      limit: 4
-    t.integer  "week_id",          limit: 4
-    t.boolean  "signed",           limit: 1,   default: false
-    t.boolean  "timesheet_locked", limit: 1,   default: false
   end
 
   add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "teams", force: :cascade do |t|
-    t.string "name", limit: 255, default: "1"
+    t.string "name", limit: 255
   end
 
   create_table "users", force: :cascade do |t|
+    t.boolean  "admin",                  limit: 1,   default: false
     t.string   "email",                  limit: 255, default: "",    null: false
     t.string   "encrypted_password",     limit: 255, default: "",    null: false
     t.string   "reset_password_token",   limit: 255
@@ -87,14 +75,13 @@ ActiveRecord::Schema.define(version: 20150528050009) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
     t.string   "last_sign_in_ip",        limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "admin",                  limit: 1,   default: false
     t.string   "first_name",             limit: 255
     t.string   "last_name",              limit: 255
     t.string   "job_title",              limit: 255
-    t.integer  "team_id",                limit: 4
     t.integer  "rate",                   limit: 4,   default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "team_id",                limit: 4
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

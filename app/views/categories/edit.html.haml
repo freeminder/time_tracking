@@ -9,5 +9,5 @@
 					= f.input :name, label_html: { class: 'my_class' }
 				.form-actions
 					= link_to 'Go back', :back, class: 'btn btn-primary'
-					= link_to 'Delete', "/categories/#{@category.id}/destroy", class: 'btn btn-danger'
+					= link_to 'Delete', category_path(@category), method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger'
 					= f.button :submit, "Update", class: 'btn btn-success'

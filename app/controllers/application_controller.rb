@@ -1,26 +1,11 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :null_session
-  # remove the line below in >= devise 3.3.0
+  protect_from_forgery with: :exception
   skip_before_filter :verify_authenticity_token
-
-  # respond_to :json, :html
-
   before_action :authenticate_user!
   before_filter :configure_permitted_parameters, if: :devise_controller?
 
-
-  def index
-    @users = User.all
-    @categories = Category.all
-    @reports = Report.all
-  end
-
-  def show
-    @users = User.all
-    @categories = Category.all
-    @reports = Report.all
+  def not_found
+    render file: "#{Rails.root}/public/404.html" , status: :not_found
   end
 
   def authorize_admin
@@ -43,5 +28,4 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
-
 end

@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
-
   before_filter :authorize_admin, except: [:show]
-
 
   def index
     @users = User.all
@@ -76,10 +74,7 @@ class UsersController < ApplicationController
   end
 
 private
-
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :team_id, :rate, :admin)
   end
-
-
 end

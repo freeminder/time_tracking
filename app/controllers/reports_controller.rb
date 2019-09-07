@@ -1,8 +1,6 @@
 class ReportsController < ApplicationController
-
-  before_action :correct_report, only: [:show, :edit, :update, :destroy]
+  before_action :set_report, only: [:show, :edit, :update, :destroy]
   before_action :current_week, only: [:index, :show, :update]
-
 
   def index
     @total = Hash[
@@ -62,14 +60,9 @@ class ReportsController < ApplicationController
 
       @previous = Report.where(["user_id = ? AND week_id < ?", current_user.id, @week_id]).last
 
-      @hours = Hour.all
-      @categories = Category.all
       @report = Report.new(created_at: Time.now, week_id: Time.now.strftime('%U'))
-
-
-      @report.categories = @categories.map { |x| Category.new name: x.name }
+      @report.categories = Category.all
       @report.categories.build
-      @report.hours.build
 
       # new week or first time
       $report_id = nil
@@ -97,7 +90,6 @@ class ReportsController < ApplicationController
 
 
   def sign
-    @report = Report.where(id: params[:id]).first
     @report.update_attributes(signed: true)
 
     # save global variable for Previous and Next navigation
@@ -186,15 +178,11 @@ class ReportsController < ApplicationController
 
 
 private
-
   def report_params
-    params.require(:report).permit(:id, :name, :category_id, :user_id, :week_id, hours_attributes:[:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
+    params.require(:report).permit(:id, :user_id, :week_id, hours_attributes:[:category_id, :sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
   end
 
-
-  # Before filters
-
-  def correct_report
+  def set_report
     @report = Report.find(params[:id])
   end
 
@@ -203,6 +191,4 @@ private
     # %W - Week number of the year. The week starts with Monday. (00..53)
     @week_id = Date.today.strftime("%U").to_i
   end
-
-
 end
