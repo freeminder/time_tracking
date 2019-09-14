@@ -1,0 +1,117 @@
+// Flash messages
+.alert-error {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+  text-align: left;
+ }
+
+.alert-alert {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+  text-align: left;
+ }
+
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+  text-align: left;
+ }
+
+.alert-notice {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+  text-align: left;
+}
+
+// Cells in timesheet
+.tg {
+  border-collapse:collapse;
+  border-spacing:0;
+  border-color:#aabcfe;
+  margin:0px auto;
+
+  td {
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    padding:15px 5px 0px 10px;
+    border-style:solid;
+    border-width:1px;
+    overflow:hidden;
+    word-break:normal;
+    border-color:#aabcfe;
+    color:#669;
+    background-color:#e8edff;
+    text-align:center;
+  }
+
+  th {
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    font-weight:normal;
+    padding:10px 5px 10px 5px;
+    border-style:solid;
+    border-width:1px;
+    overflow:hidden;
+    word-break:normal;
+    border-color:#aabcfe;
+    color:#039;
+    background-color:#b9c9fe;
+  }
+
+  .tg-0rnh {
+    // Nav; description, weekdays, total
+    background-color:#D2E4FC;
+    font-weight:bold;
+    text-align:center;
+  }
+
+  .tg-0ord {
+    // Top left: Associate Name cell
+    text-align:right;
+  }
+
+  .tg-vn4c {
+    // Days Total and Top Left 2 cells
+    background-color:#D2E4FC;
+    padding:10px 0p x 10px 0px;
+  }
+
+  .tg-vv7f {
+    // Bottom from Days Total till TOTAL
+    background-color:#D2E4FC;
+    font-weight:bold;
+    text-align:center;
+    padding:10px 0px 10px 0px;
+  }
+
+  .tg-hgcj {
+    // First and Last name
+    font-weight:bold;
+    text-align:center;
+  }
+
+  .tg-030e {
+    // Category's hours
+    padding:15px 10px 0px 10px;
+  }
+
+  .tg-031e {
+    // Category's hours, locked
+    padding:10px 10px 10px 10px;
+  }
+}
+
+.signature {
+  font: 400 30px/0.8 'Cookie', Helvetica, sans-serif;
+  color: #669;
+  text-shadow: 4px 4px 3px rgba(0,0,0,0.1);
+}
+
+// align input numbers in cells
+input[type='number'] {
+  width: 80px;
+}

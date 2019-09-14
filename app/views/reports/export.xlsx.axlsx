@@ -58,15 +58,10 @@ wb.add_worksheet(name: "Reports") do |sheet|
   end
   @cnum += 3
 
-  # @total_cell = sheet.rows.first.cells.last.index
   sheet.add_row ["Signature", "Days Total: #{$days}", "=SUM(C4:C#{@cnum})", "=SUM(D4:D#{@cnum})", "=SUM(E4:E#{@cnum})", "=SUM(F4:F#{@cnum})", "=SUM(G4:G#{@cnum})", "=SUM(H4:H#{@cnum})", "=SUM(I4:I#{@cnum})", "=SUM(J4:J#{@cnum})"],
     :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
     :style=>[signature_left, total_regular_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center, total_bold_center]
 
   sheet.merge_cells "B1:C1"
   sheet.merge_cells "C2:I2"
-
-  # sheet.merge_cells worksheet.rows.first.cells[(2..4)]
-
 end
-

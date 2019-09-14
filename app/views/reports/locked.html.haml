@@ -1,0 +1,12 @@
+.container
+  = render partial: "head"
+  %table.tg{:style => "undefined;table-layout: fixed; width: 1068px"}
+    = render partial: "reports/timesheet/main"
+    = render partial: "reports/timesheet/categories_locked"
+    = render partial: "reports/timesheet/signature_and_total"
+  %hr
+  %div{:align => "right"}
+    = "This timesheet is locked, the editing period has expired."
+    %br/
+    = link_to 'Export', "/reports/#{@report.id}/export", class: 'btn btn-primary' if @report.signed == true
+    = link_to 'Sign document', "/reports/#{@report.id}/sign", class: 'btn btn-primary' if @report.signed == false

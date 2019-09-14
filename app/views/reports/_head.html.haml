@@ -1,0 +1,25 @@
+%center
+  %h2
+    %b Reports
+.row
+  .col-md-3
+  .col-md-3
+  .col-md-3
+  .col-md-3
+    = form_tag("/reports/search", method: "post") do
+      .form-group
+        = label_tag(:date_custom, "Previous reports (custom date): ")
+        #datetimepicker1.input-group.date
+          = text_field_tag(:date_custom, nil, class: 'form-control')
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-calendar
+        :javascript
+          $(function () {
+              $('#datetimepicker1').datepicker({
+               daysOfWeekDisabled: "1,2,3,4,5,6",
+               calendarWeeks: true,
+               todayHighlight: true,
+               toggleActive: true
+              });
+          });
+        %div{:align => "right"}= submit_tag("Search", class: 'btn btn-success')

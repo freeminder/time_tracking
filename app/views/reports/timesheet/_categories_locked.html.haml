@@ -1,0 +1,11 @@
+- @hours.each do |hour|
+  - @weekday_hours = Date::DAYNAMES.map {|weekday| [weekday.downcase, 0]}.to_h
+  %tr
+    %td.tg-031e= hour.category.name
+    %td.tg-031e
+    - @weekday_hours.keys.each do |weekday|
+      %td.tg-031e= hour.send(weekday)
+      - @weekday_hours[weekday] += hour.send(weekday) if hour.send(weekday)
+      - @total_hours[weekday] += hour.send(weekday) if hour.send(weekday)
+    %td.tg-031e
+      %b= @weekday_hours.values.sum

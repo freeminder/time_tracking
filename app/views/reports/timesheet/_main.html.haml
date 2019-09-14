@@ -1,0 +1,41 @@
+%colgroup
+  %col{:style => "width: 294px"}
+    %col{:style => "width: 100px"}
+      %col{:style => "width: 100px"}
+        %col{:style => "width: 100px"}
+          %col{:style => "width: 100px"}
+            %col{:style => "width: 100px"}
+              %col{:style => "width: 100px"}
+                %col{:style => "width: 100px"}
+                  %col{:style => "width: 100px"}
+                    %col{:style => "width: 70px"}
+%tr
+  %th.tg-0ord Associate Name:
+  %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
+  %th.tg-031e
+  %th.tg-031e
+  %th.tg-031e
+  %th.tg-031e
+  %th.tg-031e
+  %th.tg-031e
+  %th.tg-031e
+%tr
+  %td.tg-vn4c
+  %td.tg-vn4c
+  %td.tg-0rnh
+    = link_to "< Previous", "/reports/#{@previous.id}" if @previous
+    = "< Previous" if @previous.nil?
+  %td.tg-0rnh{:colspan => "6"}= "For Week Starting Sunday #{@week_begin} Through Saturday #{@week_end}"
+  %td.tg-0rnh
+    = link_to "Next >", "/reports/#{@next.id}" if @next
+    = "Next >" if @next.nil?
+%tr
+  %td.tg-0rnh Description
+  %td.tg-0rnh
+  - Date::DAYNAMES.each_with_index.map { |x,i| x == "Sunday" ? [x.upcase,7] : [x.upcase,i] }.to_h.each do |weekday,day_number|
+    %td.tg-0rnh
+      = weekday
+      %br
+      - sunday_incr = weekday == "SUNDAY" ? 0 : 1
+      = Date.commercial(@report.created_at.strftime("%Y").to_i, @report.week_id+sunday_incr, day_number).strftime("%m/%d/%Y")
+  %td.tg-0rnh TOTAL
