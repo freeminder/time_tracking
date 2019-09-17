@@ -1,0 +1,24 @@
+= render partial: "header"
+%p.lead= @category.name
+%table.table
+  %tr
+    %th= "User"
+    %th Hours
+    %th Hourly pay
+    %th Amount per project
+
+  - @users.each do |user|
+    %tr
+      %td= user[:user_full_name]
+      %td= user[:categories].values.sum
+      %td= user[:user_rate]
+      %td= user[:categories].values.sum * user[:user_rate]
+  %tr
+    %td
+      %b= "Total"
+    %td
+      %b= @users.map { |user| user[:categories].values.sum }.sum
+    %td
+    %td
+      %b= @users.map { |user| user[:categories].values.sum * user[:user_rate] }.sum
+= render partial: "bottom"

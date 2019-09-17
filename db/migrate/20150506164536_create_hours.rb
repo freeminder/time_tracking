@@ -8,6 +8,8 @@ class CreateHours < ActiveRecord::Migration
       t.integer :thursday
       t.integer :friday
       t.integer :saturday
+
+      t.datetime :created_at
     end
     add_reference :hours, :report, index: true
     add_reference :hours, :category, index: true

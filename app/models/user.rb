@@ -3,10 +3,13 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
-
   belongs_to :team
   has_many :reports, dependent: :delete_all
+  has_many :hours, through: :reports
 
+  def full_name
+    ([first_name, last_name] - ['']).compact.join(' ')
+  end
 
   def self.create_new_timesheets
     User.all.each do |user|

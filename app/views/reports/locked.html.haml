@@ -8,5 +8,5 @@
   %div{:align => "right"}
     = "This timesheet is locked, the editing period has expired."
     %br/
-    = link_to 'Export', "/reports/#{@report.id}/export", class: 'btn btn-primary' if @report.signed == true
-    = link_to 'Sign document', "/reports/#{@report.id}/sign", class: 'btn btn-primary' if @report.signed == false
+    = link_to "Export", timesheet_export_path(@report, format: :xlsx), class: "btn btn-primary" if @report.signed == true
+    = link_to "Sign document", sign_report_path(@report), class: "btn btn-primary" if @report.signed == false

@@ -1,0 +1,37 @@
+- @users.each do |user|
+  %p.lead= user[:user_full_name]
+  %table.table
+    %tr
+      %th Category
+      %th Hours
+      %th Hourly pay
+      %th Amount per project
+    - user[:categories].each do |name,hours|
+      %tr
+        %td= name
+        %td= hours
+        %td= user[:user_rate]
+        %td= hours * user[:user_rate]
+    %tr
+      %td
+        %b= "Total"
+      %td
+        %b= user[:categories].values.sum
+      %td
+      %td
+        %b= user[:categories].values.sum * user[:user_rate]
+%br/
+%br/
+%table.table
+  %tr
+    %th= action_name.capitalize
+    %th
+    %th Total hours
+    %th Total amount
+  %tr
+    %td= action_name.capitalize == "Team" ? @team.name : "All"
+    %td
+    %td
+      %b= @users.map { |user| user[:categories].values.sum }.sum
+    %td
+      %b= @users.map { |user| user[:categories].values.map { |hours| hours * user[:user_rate] }.sum }.sum

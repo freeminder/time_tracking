@@ -1,0 +1,74 @@
+cells_total = []
+cell_merge = 1
+
+JSON.parse(params[:export][:users]).each_with_index do |user,i|
+  sheet.add_row ["Associate Name:", user["user_full_name"], "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@header_right, @header_center, @header_right, @header_right, @header_right]
+  sheet.add_row ["Stats for a time period from #{params[:export][:date]}", "", "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@lemon_bold, @lemon_bold, @lemon_bold, @lemon_bold, @lemon_bold]
+  sheet.add_row ["Description", "", "Hours", "Hourly pay", "Amount per project"],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@bold_center, @bold_center, @lemon_bold, @lemon_bold, @lemon_bold]
+
+  user["categories"].each_with_index do |category_hash,ii|
+    cur_row = sheet.rows.length + 1
+    sheet.add_row [category_hash.first, "", category_hash.last, user["user_rate"], "= C#{cur_row} * D#{cur_row}"],
+      :widths=>[45, 30, 20, 15, 20],
+      :style=>[@regular_left, @regular_center, @lemon_regular, @lemon_regular, @lemon_regular]
+  end
+  cells_total << {
+    category_begin: sheet.rows.length - user["categories"].length + 1,
+    category_end: sheet.rows.length,
+    total: sheet.rows.length + 2
+  }
+
+  sheet.add_row ["", "", "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@line_above_total, @line_above_total, @line_above_total, @line_above_total, @line_above_total]
+
+  cb = cells_total.last[:category_begin]
+  ce = cells_total.last[:category_end]
+  sheet.add_row ["Total", "", "=SUM(C#{cb}:C#{ce})", "", "=SUM(E#{cb}:E#{ce})"],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@signature_left, @total_regular_center, @lemon_bold, @lemon_bold, @lemon_bold]
+
+  sheet.merge_cells "B#{cell_merge}:C#{cell_merge}"
+  sheet.merge_cells "D#{cell_merge}:E#{cell_merge}"
+  sheet.merge_cells "A#{cell_merge+1}:E#{cell_merge+1}"
+
+  # space between users stats
+  sheet.add_row ["", "", "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@space_between_stats, @space_between_stats, @space_between_stats, @space_between_stats, @space_between_stats]
+  sheet.add_row ["", "", "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@space_between_stats, @space_between_stats, @space_between_stats, @space_between_stats, @space_between_stats]
+
+  cell_merge += user["categories"].length + 7 # SUM Hours and Amount per project
+end
+
+# additional space between users stats and TOTAL
+sheet.add_row ["", "", "", "", ""],
+  :widths=>[45, 30, 20, 15, 20],
+  :style=>[@space_between_stats, @space_between_stats, @space_between_stats, @space_between_stats, @space_between_stats]
+
+export_title = params[:export][:type] == "team" ? "Team" : "Users"
+export_name  = params[:export][:type] == "team" ? params[:export][:team_name] : "All"
+
+# TOTAL
+sheet.add_row ["Stats for a time period from #{params[:export][:date]}", "", "", "", ""],
+  :widths=>[45, 45, 20, 15, 20],
+  :style=>[@lemon_bold, @lemon_bold, @lemon_bold, @lemon_bold, @lemon_bold]
+sheet.add_row [export_title, "", "Total hours", "", "Total hours"],
+  :widths=>[45, 45, 20, 15, 20],
+  :style=>[@bold_center, @bold_center, @bold_center, @bold_center, @bold_center]
+
+c_total = cells_total.map { |c| "C#{c[:total]}" }.join("+")
+e_total = cells_total.map { |c| "E#{c[:total]}" }.join("+")
+sheet.add_row [export_name, "", "=SUM(#{c_total})", "", "=SUM(#{e_total})"],
+  :widths=>[45, 45, 20, 15, 20],
+  :style=>[@regular_center, @regular_center, @total_bold_center, @regular_center, @total_bold_center]
+
+sheet.merge_cells "A#{cell_merge+1}:E#{cell_merge+1}"

@@ -1,0 +1,24 @@
+= render partial: "header"
+%p.lead= @user.full_name
+%table.table
+  %tr
+    %th= "Category"
+    %th Hours
+    %th Hourly pay
+    %th Amount per project
+
+  - @categories.each do |name,hours_count|
+    %tr
+      %td= name
+      %td= hours_count
+      %td= @user.rate
+      %td= hours_count * @user.rate
+  %tr
+    %td
+      %b= "Total"
+    %td
+      %b= @categories.values.sum
+    %td
+    %td
+      %b= @user.rate * @categories.values.sum
+= render partial: "bottom"

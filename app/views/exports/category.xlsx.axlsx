@@ -1,0 +1,23 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Reports") do |sheet|
+  render partial: "styles", locals: { wb: wb }
+
+  sheet.add_row ["Category:", params[:export][:category_name], "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@header_right, @header_center, @header_right, @header_right, @header_right]
+  sheet.add_row ["Stats for a time period from #{params[:export][:date]}", "", "", "", ""],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@lemon_bold, @lemon_bold, @lemon_bold, @lemon_bold, @lemon_bold]
+  sheet.add_row ["User", "", "Hours", "Hourly pay", "Amount per project"],
+    :widths=>[45, 30, 20, 15, 20],
+    :style=>[@bold_center, @bold_center, @lemon_bold, @lemon_bold, @lemon_bold]
+
+  JSON.parse(params[:export][:users]).each_with_index do |user,i|
+    sheet.add_row [user["user_full_name"], "", user["categories"].values.sum, user["user_rate"], "= C#{i+4} * D#{i+4}"],
+      :widths=>[45, 30, 20, 15, 20],
+      :style=>[@regular_left, @regular_center, @lemon_regular, @lemon_regular, @lemon_regular]
+    @i = i
+  end
+
+  render partial: "bottom_user_category", locals: { sheet: sheet }
+end

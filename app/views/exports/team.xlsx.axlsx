@@ -1,0 +1,5 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Reports") do |sheet|
+  render partial: "styles", locals: { wb: wb }
+  render partial: "body_team_all", locals: { sheet: sheet }
+end

@@ -8,6 +8,6 @@
       = render partial: "reports/timesheet/signature_and_total"
     %hr
     %div{:align => "right"}
-      = link_to 'Export', "/reports/#{@report.id}/export", class: 'btn btn-primary' if @report.signed == true
-      = f.button :submit, "Sign and Submit", class: 'btn btn-success' if @report.signed == false
-      = f.button :submit, "Submit", class: 'btn btn-success' if @report.signed == true
+      = link_to "Export", timesheet_export_path(@report, format: :xlsx), class: "btn btn-primary" if @report.signed == true
+      = f.button :submit, "Sign and Submit", class: "btn btn-success" if @report.signed == false
+      = f.button :submit, "Submit", class: "btn btn-success" if @report.signed == true

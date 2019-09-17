@@ -1,36 +1,11 @@
 .container
   .row
     .col-md-5
-      %p.lead= "Single user's time over a specific period"
+      %p.lead= "Single user over a specific time period"
       %hr
-      = form_tag("", method: "post") do
+      = form_tag(stat_reports_user_path, method: "post") do
         .form-group
           = label_tag(:user_id, "User: ")
-          = select_tag 'user_id', options_from_collection_for_select(@users, 'id', 'fullname'), class: 'form-control'
+          = select_tag "user_id", options_from_collection_for_select(@users, "id", "full_name"), class: "form-control"
           %br/
-          = label_tag(:date, "Date: ")
-          = select_tag 'date', options_for_select([["Last week", "last_week"], ["Last month", "last_month"], ["Last year", "last_year"]]),
-           class: 'form-control', prompt: "Select a date"
-          %br/
-          = "OR select custom date"
-          %br/
-          %br/
-          = label_tag(:date_custom, "Custom date: ")
-          #datetimepicker1.input-group.date
-            = text_field_tag(:date_custom, nil, class: 'form-control')
-            %span.input-group-addon
-              %span.glyphicon.glyphicon-calendar
-          :javascript
-            $(function () {
-                $('#datetimepicker1').datepicker({
-                 todayHighlight: true,
-                 toggleActive: true
-                });
-            });
-
-
-          %hr
-          %div{:align => "right"}
-            = link_to 'Go back', :back, class: 'btn btn-primary'
-            = submit_tag("Generate stats", class: 'btn btn-success')
-
+          = render partial: "body"

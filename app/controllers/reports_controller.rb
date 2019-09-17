@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_action :set_report,   only: [:show, :update, :destroy]
+  before_action :set_report,   only: [:show, :update, :destroy, :sign, :export]
   before_action :current_week, only: [:new, :update, :create]
 
   def index
@@ -18,8 +18,7 @@ class ReportsController < ApplicationController
   end
 
   def show
-    @report = Report.find(params[:id])
-    @hours = @report.hours
+    @hours = @report.hours.order("categories.name").joins(:category).select("hours.*, categories.name as category_name")
     @total_hours = Date::DAYNAMES.map {|weekday| [weekday.downcase, 0]}.to_h
 
     set_nav
@@ -49,8 +48,7 @@ class ReportsController < ApplicationController
   def create
     @report = current_user.reports.build(report_params.merge(week_id: @week_id))
     if @report.save
-      flash[:success] = "Report has been successfully created!"
-      redirect_to @report
+      redirect_to report_path(@report), notice: "Report has been successfully created!"
     else
       render 'new'
     end
@@ -65,13 +63,19 @@ class ReportsController < ApplicationController
     end
   end
 
-  def export
-    @hours = Hour.where(report_id: params[:id])
-    if render xlsx: "export", template: "reports/export"
-      flash[:notice] = 'Report has been successfully exported!'
+  def sign
+    if @report.update_attributes(signed: true)
+      redirect_to report_path(@report), notice: 'Report has been successfully signed!'
     else
-      flash[:error] = 'Something goes wrong!'
+      render action: 'show'
     end
+  end
+
+  def export
+    @user  = @report.user
+    @hours = @report.hours
+    set_week_begin_and_end
+    render xlsx: "export", template: "exports/timesheet"
   end
 
 

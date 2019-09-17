@@ -1,0 +1,12 @@
+%hr
+%div{:align => "right"}
+  = form_tag(exports_stat_path, method: :post) do
+    = hidden_field(:export, :type, :value => action_name)
+    = hidden_field(:export, :user_full_name, :value => @user.full_name) if action_name == "user"
+    = hidden_field(:export, :user_rate, :value => @user.rate)           if action_name == "user"
+    = hidden_field(:export, :categories, :value => @categories.to_json) if action_name == "user"
+    = hidden_field(:export, :team_name, :value => @team.name)           if action_name == "team"
+    = hidden_field(:export, :category_name, :value => @category.name)   if action_name == "category"
+    = hidden_field(:export, :date, :value => @date.strftime('%m/%d/%Y'))
+    = hidden_field(:export, :users, :value => @users.to_json)
+    = submit_tag("Export", class: "btn btn-primary")

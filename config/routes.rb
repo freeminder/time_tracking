@@ -6,19 +6,23 @@ Rails.application.routes.draw do
   resources :teams
   resources :categories
 
-  resources :stats
-  get 'stats/user' => 'stats#user'
-  post 'stats/user' => 'stats#reports'
-  get 'stats/team' => 'stats#team'
-  post 'stats/team' => 'stats#reports'
+  get 'stats' => 'stats#index'
+  get 'stats/user'     => 'stats#user'
+  get 'stats/team'     => 'stats#team'
   get 'stats/category' => 'stats#category'
-  post 'stats/category' => 'stats#reports'
-  get 'stats/all' => 'stats#all'
-  post 'stats/all' => 'stats#reports'
+  get 'stats/all'      => 'stats#all'
+
+  post 'stat_reports/user'     => 'stat_reports#user'
+  post 'stat_reports/team'     => 'stat_reports#team'
+  post 'stat_reports/category' => 'stat_reports#category'
+  post 'stat_reports/all'      => 'stat_reports#all'
+
+  post 'exports/stat' => 'exports#stat'
 
   resources :reports
-  get 'reports/:id/export' => 'reports#export'
-  post 'reports/search' => 'reports#search'
+  get  'reports/:id/sign'   => 'reports#sign',   :as => :sign_report
+  get  'reports/:id/export' => 'reports#export', :as => :timesheet_export
+  post 'reports/search'     => 'reports#search'
 
   match "*path", to: "application#not_found", via: :all
 end

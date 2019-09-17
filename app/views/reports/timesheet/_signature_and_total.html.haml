@@ -1,13 +1,9 @@
 %tr
   %td.tg-vn4c
     %b= "Signature: "
-    %b.signature= "#{current_user.first_name} #{current_user.last_name}" if @report.signed == true
+    %b.signature= @report.user.full_name if @report.signed == true
   %td.tg-vn4c
-    - days = 0
-    - @total_hours.keys.each do |weekday|
-      - days += 1 if @total_hours[weekday] > 0
-    %b= "Days Total: #{days}"
-    - $days = days
+    %b= "Days Total: #{@total_hours.select {|weekday,hours| hours > 0}.length}"
   - @total_hours.keys.each do |weekday|
     %td.tg-vv7f= @total_hours[weekday]
   %td.tg-vv7f= @total_hours.values.sum

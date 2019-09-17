@@ -34,15 +34,16 @@ ActiveRecord::Schema.define(version: 20150521204003) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "hours", force: :cascade do |t|
-    t.integer "sunday",      limit: 4
-    t.integer "monday",      limit: 4
-    t.integer "tuesday",     limit: 4
-    t.integer "wednesday",   limit: 4
-    t.integer "thursday",    limit: 4
-    t.integer "friday",      limit: 4
-    t.integer "saturday",    limit: 4
-    t.integer "report_id",   limit: 4
-    t.integer "category_id", limit: 4
+    t.integer  "sunday",      limit: 4
+    t.integer  "monday",      limit: 4
+    t.integer  "tuesday",     limit: 4
+    t.integer  "wednesday",   limit: 4
+    t.integer  "thursday",    limit: 4
+    t.integer  "friday",      limit: 4
+    t.integer  "saturday",    limit: 4
+    t.datetime "created_at"
+    t.integer  "report_id",   limit: 4
+    t.integer  "category_id", limit: 4
   end
 
   add_index "hours", ["category_id"], name: "index_hours_on_category_id", using: :btree

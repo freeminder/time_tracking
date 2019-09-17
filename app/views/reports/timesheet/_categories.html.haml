@@ -5,9 +5,10 @@
     %td.tg-030e= hour.category.name
     %td.tg-030e
     - @weekday_hours.keys.each do |weekday|
-      %td.tg-030e= ff.input weekday.to_sym, as: :integer, label: false, input_html: { min: '0', max: '12', step: 'any', id: "shares_#{weekday[0..2]}#{ff.index}" }
+      %td.tg-030e= ff.input weekday.to_sym, as: :integer, label: false, input_html: { min: "0", max: "12", step: "any", id: "shares_#{weekday[0..2]}#{ff.index}" }
       - @weekday_hours[weekday] += hour.send(weekday) if hour.send(weekday)
       - @total_hours[weekday] += hour.send(weekday) if hour.send(weekday)
     %td.tg-030e
       %span{:id => "result#{ff.index}", :style => "font-weight: bold;"}= @weekday_hours.values.sum
     %td.tg-030e= ff.input :category_id, as: :hidden if action_name == "new"
+    %td.tg-030e= ff.input :user_id, as: :hidden, input_html: { value: current_user.id } if action_name == "new"

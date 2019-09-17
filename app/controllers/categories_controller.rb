@@ -20,8 +20,7 @@ class CategoriesController < ApplicationController
       Report.all.each do |report|
         Hour.create(report_id: report.id, category_id: @category.id)
       end
-      flash[:success] = "Category has been successfully created!"
-      redirect_to @category
+      redirect_to @category, notice: "Category has been successfully created!"
     else
       render 'new'
     end

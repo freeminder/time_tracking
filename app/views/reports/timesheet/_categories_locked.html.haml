@@ -1,7 +1,7 @@
 - @hours.each do |hour|
   - @weekday_hours = Date::DAYNAMES.map {|weekday| [weekday.downcase, 0]}.to_h
   %tr
-    %td.tg-031e= hour.category.name
+    %td.tg-031e= hour.category_name
     %td.tg-031e
     - @weekday_hours.keys.each do |weekday|
       %td.tg-031e= hour.send(weekday)
