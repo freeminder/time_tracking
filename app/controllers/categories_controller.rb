@@ -15,14 +15,14 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(category_params)
-    @categories = Category.all
     if @category.save
+      # update existing reports and hours with new category
       Report.all.each do |report|
-        Hour.create(report_id: report.id, category_id: @category.id)
+        report.hours.create(category_id: @category.id, created_at: report.created_at)
       end
       redirect_to @category, notice: "Category has been successfully created!"
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -31,22 +31,23 @@ class CategoriesController < ApplicationController
 
   def update
     if @category.update_attributes(category_params)
-      redirect_to :back, notice: 'Category has been successfully updated!'
+      redirect_to :back, notice: "Category has been successfully updated!"
     else
-      render action: 'edit'
+      render action: "edit"
     end
   end
 
   def destroy
     if @category.destroy
-      redirect_to action: 'index'
-      flash[:notice] = 'Category has been successfully deleted!'
+      redirect_to categories_path, notice: "Category has been successfully deleted!"
     else
-      render action: 'edit'
+      render action: "edit"
     end
   end
 
-private
+
+  private
+
   def category_params
     params.require(:category).permit(:name)
   end

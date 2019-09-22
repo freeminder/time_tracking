@@ -1,9 +1,10 @@
 .container
-	.row
-		.col-md-4
-			%p.lead= "#{@category.name}"
-			%div{:align => "right"}
-				%hr
-				= link_to 'Go back', :back, class: 'btn btn-primary'
-				= link_to 'Delete', category_path(@category), method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger'
-				= link_to 'Edit', edit_category_path, class: 'btn btn-success'
+  .row
+    .col-md-4
+      %h3
+        %b= @category.name
+      %div{ align: "right" }
+        %hr
+        = link_to "Go back", :back, class: "btn btn-primary"
+        = link_to "Delete", category_path(@category), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-danger"
+        = link_to "Edit", edit_category_path, class: "btn btn-success"
