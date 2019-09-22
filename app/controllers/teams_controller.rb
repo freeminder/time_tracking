@@ -1,15 +1,12 @@
 class TeamsController < ApplicationController
   before_filter :authorize_admin
+  before_action :set_team, only: [:show, :edit, :update, :destroy]
 
   def index
     @teams = Team.all
-    @users = User.all
   end
 
   def show
-    @users = User.all
-    @team_id = params[:id].to_i
-    @team = Team.find(@team_id)
   end
 
   def new
@@ -18,48 +15,40 @@ class TeamsController < ApplicationController
 
   def create
     @team = Team.new(team_params)
-    @teams = Team.all
     if @team.save
-      flash[:success] = "Team has been successfully created!"
-      redirect_to @team
+      redirect_to @team, notice: "Team has been successfully created!"
     else
-      render 'new'
+      render "new"
     end
   end
 
   def edit
-    @team = Team.find(params[:id])
   end
 
   def update
-    @team = Team.find(params[:id])
     if @team.update_attributes(team_params)
-      respond_to do |format|
-        format.any { redirect_to :back, notice: 'Team has been successfully updated!' }
-      end
+      redirect_to :back, notice: "Team has been successfully updated!"
     else
-      respond_to do |format|
-        format.any { render action: 'edit' }
-      end
+      render action: "edit"
     end
   end
 
   def destroy
-    @team = Team.find(params[:id])
     if @team.destroy
-      respond_to do |format|
-        format.any { redirect_to action: 'index' }
-        flash[:notice] = 'Team has been successfully deleted!'
-      end
+      redirect_to teams_path, notice: "Team has been successfully deleted!"
     else
-      respond_to do |format|
-        format.any { render action: 'edit' }
-      end
+      render action: "edit"
     end
   end
 
-private
+
+  private
+
   def team_params
     params.require(:team).permit(:name)
+  end
+
+  def set_team
+    @team = Team.find(params[:id])
   end
 end

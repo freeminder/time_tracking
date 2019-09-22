@@ -1,15 +1,18 @@
-%h2
-	%b Teams
-%table.table
-	%tr
-		%th Team
-		%th Users
-	- @teams.each do |team|
-		%tr
-			%td= link_to team.name, "/teams/#{team.id}"
-			%td
-				- @users.each do |user|
-					= link_to user.email, "/users/#{user.id}" if user.team_id == team.id
-%hr
-%div{:align => "right"}
-	= link_to 'Add team', new_team_path, class: 'btn btn-success'
+.container
+  .row
+    .col-md-8
+      %h2
+        %b Teams
+      %table.table
+        %tr
+          %th Team
+          %th Users
+        - @teams.each do |team|
+          %tr
+            %td= link_to team.name, team_path(team)
+            %td
+              - team.users.each do |user|
+                = link_to user.email, user_path(user)
+      %hr
+      %div{:align => "right"}
+        = link_to "Add team", new_team_path, class: "btn btn-success"
