@@ -3,4 +3,6 @@ class Report < ActiveRecord::Base
   has_many :hours, dependent: :delete_all
   accepts_nested_attributes_for :hours
   has_many :categories, through: :hours
+
+  validates :user, presence: :true, on: [:create, :update]
 end

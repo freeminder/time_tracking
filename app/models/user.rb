@@ -1,11 +1,13 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable,
-         :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
   belongs_to :team
   has_many :reports, dependent: :delete_all
   has_many :hours, through: :reports
+
+  validates :email, :first_name, :last_name, :rate, :team, presence: true
+  validates :email, uniqueness: true, on: :create
 
   def full_name
     ([first_name, last_name] - ['']).compact.join(' ')

@@ -1,7 +1,10 @@
 class Hour < ActiveRecord::Base
   belongs_to :report
   belongs_to :category
-  delegate :user, :to => :report, :allow_nil => true
+  delegate :user, to: :report, allow_nil: true
+
+  validates :category, presence: :true, on: [:create, :update]
+  validates :report, presence: :true, on: [:update]
   validate :zero_values, on: [:update, :create]
 
   def zero_values
