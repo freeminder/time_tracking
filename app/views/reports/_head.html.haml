@@ -6,7 +6,7 @@
   .col-md-3
   .col-md-3
   .col-md-3
-    = form_tag("/reports/search", method: "post") do
+    = form_tag(reports_search_path, method: "post") do
       .form-group
         = label_tag(:date_custom, "Previous reports (custom date): ")
         #datetimepicker1.input-group.date

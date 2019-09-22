@@ -11,7 +11,7 @@
                     %col{:style => "width: 70px"}
 %tr
   %th.tg-0ord Associate Name:
-  %th.tg-hgcj{:colspan => "2"} #{current_user.first_name} #{current_user.last_name}
+  %th.tg-hgcj{:colspan => "2"}= current_user.full_name
   %th.tg-031e
   %th.tg-031e
   %th.tg-031e
@@ -23,11 +23,11 @@
   %td.tg-vn4c
   %td.tg-vn4c
   %td.tg-0rnh
-    = link_to "< Previous", "/reports/#{@previous.id}" if @previous
+    = link_to "< Previous", report_path(@previous) if @previous
     = "< Previous" if @previous.nil?
   %td.tg-0rnh{:colspan => "6"}= "For Week Starting Sunday #{@week_begin} Through Saturday #{@week_end}"
   %td.tg-0rnh
-    = link_to "Next >", "/reports/#{@next.id}" if @next
+    = link_to "Next >", report_path(@next) if @next
     = "Next >" if @next.nil?
 %tr
   %td.tg-0rnh Description

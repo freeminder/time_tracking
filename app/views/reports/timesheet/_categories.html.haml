@@ -11,4 +11,3 @@
     %td.tg-030e
       %span{:id => "result#{ff.index}", :style => "font-weight: bold;"}= @weekday_hours.values.sum
     %td.tg-030e= ff.input :category_id, as: :hidden if action_name == "new"
-    %td.tg-030e= ff.input :user_id, as: :hidden, input_html: { value: current_user.id } if action_name == "new"
