@@ -7,9 +7,15 @@ class Hour < ActiveRecord::Base
   validates :report, presence: :true, on: [:update]
   validate :zero_values, on: [:update, :create]
 
+  def week_attrs
+    attributes.except("id", "created_at", "report_id", "category_id")
+  end
+
+
+  private
+
   def zero_values
     # do a nice output without useless values in the timesheet
-    attrs = attributes.except("id", "report_id", "category_id", "created_at")
-    update_attributes(attrs.map { |k,v| v == 0 ? [k.to_sym,nil] : [k.to_sym,v] }.to_h) if attrs.select { |k,v| v == 0 }.any?
+    update_attributes(week_attrs.map { |k,v| v == 0 ? [k.to_sym,nil] : [k.to_sym,v] }.to_h) if week_attrs.select { |k,v| v == 0 }.any?
   end
 end

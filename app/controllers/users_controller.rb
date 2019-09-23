@@ -21,8 +21,8 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @teams = Team.all
     if @user.save
+      UserService.create_new_timesheets(@user)
       redirect_to @user, notice: "User has been successfully created!"
     else
       render "new"

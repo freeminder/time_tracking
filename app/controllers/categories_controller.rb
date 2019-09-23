@@ -16,10 +16,7 @@ class CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
     if @category.save
-      # update existing reports and hours with new category
-      Report.all.each do |report|
-        report.hours.create(category_id: @category.id, created_at: report.created_at)
-      end
+      CategoryService.add_to_reports(@category.id)
       redirect_to @category, notice: "Category has been successfully created!"
     else
       render "new"

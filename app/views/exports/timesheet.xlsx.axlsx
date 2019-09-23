@@ -14,7 +14,7 @@ wb.add_worksheet(name: "Reports") do |sheet|
 
   cr = 4 # category row
   @hours.each do |hour|
-    sheet.add_row [hour.category.name, "", hour.attributes.except("id", "report_id", "category_id", "user_id", "created_at").values, "=SUM(C#{cr}:I#{cr})"].flatten,
+    sheet.add_row [hour.category.name, "", hour.week_attrs.values, "=SUM(C#{cr}:I#{cr})"].flatten,
       :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
       :style=>[@regular_left, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @bold_center]
     cr += 1
