@@ -13,3 +13,4 @@
 /.ruby-gemset
 /.ruby-version
 
+/db/recent_data.json
