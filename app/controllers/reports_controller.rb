@@ -56,7 +56,12 @@ class ReportsController < ApplicationController
   def update
     if @report.update_attributes(report_params)
       @report.update_attributes(signed: true) if @report.signed == false
-      redirect_to report_path(@report), notice: "Report has been successfully updated!"
+      if params[:commit] == "Export"
+        set_week_begin_and_end
+        render xlsx: "export", template: "exports/timesheet.xlsx.axlsx"
+      else
+        redirect_to report_path(@report), notice: "Report has been successfully updated!"
+      end
     else
       render action: "show"
     end
@@ -71,8 +76,6 @@ class ReportsController < ApplicationController
   end
 
   def export
-    @user  = @report.user
-    @hours = @report.hours
     set_week_begin_and_end
     render xlsx: "export", template: "exports/timesheet"
   end

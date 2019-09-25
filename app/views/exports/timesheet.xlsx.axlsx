@@ -2,7 +2,7 @@ wb = xlsx_package.workbook
 wb.add_worksheet(name: "Reports") do |sheet|
   render partial: "exports/styles_timesheet", locals: { wb: wb }
 
-  sheet.add_row ["Associate Name:", @user.full_name, "", "", "", "", "", "", "", ""],
+  sheet.add_row ["Associate Name:", @report.user.full_name, "", "", "", "", "", "", "", ""],
     :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
     :style=>[@header_right, @header_center, @header_center, @header_center, @header_center, @header_center, @header_center, @header_center, @header_center, @header_center]
   sheet.add_row ["", "", "For Week Starting Sunday #{@week_begin} Through Saturday #{@week_end}", "", "", "", "", "", "", ""],
@@ -13,7 +13,7 @@ wb.add_worksheet(name: "Reports") do |sheet|
     :style=>[@bold_center, @bold_center, @bold_center, @bold_center, @bold_center, @bold_center, @bold_center, @bold_center, @bold_center, @bold_center]
 
   cr = 4 # category row
-  @hours.each do |hour|
+  @report.hours.each do |hour|
     sheet.add_row [hour.category.name, "", hour.week_attrs.values, "=SUM(C#{cr}:I#{cr})"].flatten,
       :widths=>[45, 15, 15, 15, 15, 15, 15, 15, 15],
       :style=>[@regular_left, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @regular_center, @bold_center]
