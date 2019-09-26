@@ -23,4 +23,9 @@ group :development, :test do
   gem "spring", ">= 1.3.6"
   gem "dotenv-rails"
   gem "awesome_print"
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "shoulda-matchers"
+  gem "database_cleaner"
+  gem "faker"
 end

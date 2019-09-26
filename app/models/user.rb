@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   validates :last_name, length: { minimum: 2 }
   validates :email, uniqueness: true, on: :create
   validates :email, format: { :with => Devise::email_regexp }
-  validates :password, length: { in: 6..20 }
+  validates :password, length: { in: 8..128 }
   validates :password, confirmation: true, unless: -> { password.blank? }
 
   def full_name

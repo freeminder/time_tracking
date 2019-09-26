@@ -1,16 +1,12 @@
-# Ignore bundler config.
 /.bundle
+/.ruby-gemset
+/.ruby-version
+/.byebug_history
 
-# Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+/public/assets/
 
 /.env
 /config/secrets.yml
-
-/public/assets/
-
-/.ruby-gemset
-/.ruby-version
-
 /db/recent_data.json
