@@ -4,9 +4,10 @@ Time tracking web application.
 
 ## Requirements
 
-* **Ruby >= 1.9.3**
+* **Ruby >= 2.3.0**
 * **Bundler**
 * **MySQL server**
+* **Redis server**
 
 ## Setup dev env
 
@@ -20,12 +21,12 @@ rake db:setup
 This will run database creation, migration and seeds.
 
 ## Background jobs
-Run:
+Run sidekiq:
 ```
-rake jobs:work
+bundle exec sidekiq
 ```
 
-### Tests
+## Tests
 Run tests everytime before commiting with:
 
 ```

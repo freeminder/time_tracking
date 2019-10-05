@@ -1,7 +1,14 @@
+require 'sidekiq/web'
+require 'sidekiq/cron/web'
+
 Rails.application.routes.draw do
   root 'reports#index'
 
   devise_for :users
+  authenticated :user, lambda { |u| u.admin } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   resources :users
   resources :teams
   resources :categories
@@ -24,5 +31,5 @@ Rails.application.routes.draw do
   get  'reports/:id/export' => 'reports#export', :as => :timesheet_export
   post 'reports/search'     => 'reports#search'
 
-  match "*path", to: "application#not_found", via: :all
+  match '*path', to: 'application#not_found', via: :all
 end

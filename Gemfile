@@ -1,4 +1,4 @@
-ruby "2.2.2"
+ruby '2.3.0'
 source "https://rubygems.org"
 
 gem "rails", "4.2.11.1"
@@ -15,8 +15,8 @@ gem "uglifier", ">= 1.3.0"
 gem "jquery-rails"
 gem "turbolinks"
 gem "axlsx_rails"
-gem "delayed_job_active_record"
-gem "whenever", require: false
+gem 'sidekiq'
+gem 'sidekiq-cron', '~> 1.1'
 
 group :development, :test do
   gem "byebug"

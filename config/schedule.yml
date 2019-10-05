@@ -1,0 +1,12 @@
+lock_timesheets_job:
+  cron: '0 0 * * SUN'
+  class: 'LockTimesheetsWorker'
+
+create_new_timesheets_job:
+  cron: '0 0 * * SUN'
+  class: 'CreateNewTimesheetsWorker'
+
+timesheet_not_ready_notification_job:
+  cron: '0 16 * * *'
+  class: 'TimesheetNotReadyNotificationWorker'
+  # queue: mailers
