@@ -9,4 +9,4 @@
 
 /.env
 /config/secrets.yml
-/db/recent_data.json
+/db/data.json

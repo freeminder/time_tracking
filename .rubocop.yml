@@ -1,0 +1,16 @@
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 20
+
+AllCops:
+  Exclude:
+    - Gemfile
+    - config/routes.rb
+    - db/schema.rb
+    - bin/**/*
+    - node_modules/**/*

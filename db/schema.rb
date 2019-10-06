@@ -11,27 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150521204003) do
+ActiveRecord::Schema.define(version: 20150506164536) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name", limit: 255
   end
-
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   limit: 4,     default: 0, null: false
-    t.integer  "attempts",   limit: 4,     default: 0, null: false
-    t.text     "handler",    limit: 65535,             null: false
-    t.text     "last_error", limit: 65535
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by",  limit: 255
-    t.string   "queue",      limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "hours", force: :cascade do |t|
     t.integer  "sunday",      limit: 4
@@ -51,8 +35,8 @@ ActiveRecord::Schema.define(version: 20150521204003) do
 
   create_table "reports", force: :cascade do |t|
     t.integer  "week_id",          limit: 4
-    t.boolean  "signed",           limit: 1, default: false
-    t.boolean  "timesheet_locked", limit: 1, default: false
+    t.boolean  "signed",                     default: false
+    t.boolean  "timesheet_locked",           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id",          limit: 4
@@ -65,7 +49,7 @@ ActiveRecord::Schema.define(version: 20150521204003) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.boolean  "admin",                  limit: 1,   default: false
+    t.boolean  "admin",                              default: false
     t.string   "email",                  limit: 255, default: "",    null: false
     t.string   "encrypted_password",     limit: 255, default: "",    null: false
     t.string   "reset_password_token",   limit: 255

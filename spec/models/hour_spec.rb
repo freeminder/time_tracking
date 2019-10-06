@@ -1,30 +1,32 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe Hour, :type => :model do
+require 'rails_helper'
+
+RSpec.describe Hour, type: :model do
   attrs = {}
-  Date::DAYNAMES.map { |dayname| attrs.merge!(dayname.downcase.to_sym => Faker::Number.number(1)) }
+  Date::DAYNAMES.map do |dayname|
+    attrs.merge!(dayname.downcase.to_sym => Faker::Number.number(1))
+  end
 
-  subject {
-    described_class.new(attrs)
-  }
+  subject { described_class.new(attrs) }
 
-  describe "Validations" do
-    it "is valid with valid attributes" do
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
       subject.report = create(:report)
       subject.category = create(:category)
       expect(subject).to be_valid
     end
 
-    it "is not valid without attributes" do
+    it 'is not valid without attributes' do
       expect(described_class.new).to_not be_valid
     end
 
-    it "is not valid without a category" do
+    it 'is not valid without a category' do
       subject.report = create(:report)
       expect(subject).to_not be_valid
     end
 
-    it "should replace zero values with nil" do
+    it 'should replace zero values with nil' do
       dayname = Date::DAYNAMES.sample.downcase
       subject[dayname] = 0
       subject.validate
@@ -32,14 +34,16 @@ RSpec.describe Hour, :type => :model do
     end
   end
 
-  describe "Associations" do
+  describe 'Associations' do
     it { should belong_to(:report) }
     it { should belong_to(:category) }
   end
 
-  describe "Object Methods" do
-    it "#week_attrs" do
-      expect(subject.week_attrs).to eq(subject.attributes.except("id", "created_at", "report_id", "category_id"))
+  describe 'Object Methods' do
+    it '#week_attrs' do
+      subject_attrs = subject.attributes.except('id', 'created_at',
+                                                'report_id', 'category_id')
+      expect(subject.week_attrs).to eq(subject_attrs)
     end
   end
 end

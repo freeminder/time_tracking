@@ -3,20 +3,24 @@
 # User mailer
 class UserMailer < ActionMailer::Base
   def timesheet_ready_notify(user, report)
+    @user = user
+    @report = report
+
     mail(
       from: ENV['EMAIL_FROM'],
       to: user.email,
-      subject: 'You have finished report!',
-      body: "Thank you for finishing the report at #{report_url(report)}!"
+      subject: 'You have a finished report!'
     )
   end
 
   def timesheet_not_ready_notify(user, report)
+    @user = user
+    @report = report
+
     mail(
       from: ENV['EMAIL_FROM'],
       to: user.email,
-      subject: 'You have unfinished report!',
-      body: "Please finish your report at #{report_url(report)}."
+      subject: 'You have an unfinished report!'
     )
   end
 end

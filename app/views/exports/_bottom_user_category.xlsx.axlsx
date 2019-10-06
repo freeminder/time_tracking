@@ -1,10 +1,14 @@
-sheet.add_row ["", "", "", "", ""],
-  :widths=>[45, 30, 20, 15, 20],
-  :style=>[@line_above_total, @line_above_total, @line_above_total, @line_above_total, @line_above_total]
-sheet.add_row ["Total", "", "=SUM(C4:C#{@i+4})", "", "=SUM(E4:E#{@i+4})"],
-  :widths=>[45, 30, 20, 15, 20],
-  :style=>[@signature_left, @total_regular_center, @lemon_bold, @lemon_bold, @lemon_bold]
+# frozen_string_literal: true
 
-sheet.merge_cells "B1:C1"
-sheet.merge_cells "D1:E1"
-sheet.merge_cells "A2:E2"
+sheet.add_row ['', '', '', '', ''],
+              widths: [45, 30, 20, 15, 20],
+              style: [@line_above_total, @line_above_total, @line_above_total,
+                      @line_above_total, @line_above_total]
+sheet.add_row ['Total', '', "=SUM(C4:C#{@i + 4})", '', "=SUM(E4:E#{@i + 4})"],
+              widths: [45, 30, 20, 15, 20],
+              style: [@signature_left, @total_regular_center, @lemon_bold,
+                      @lemon_bold, @lemon_bold]
+
+sheet.merge_cells 'B1:C1'
+sheet.merge_cells 'D1:E1'
+sheet.merge_cells 'A2:E2'

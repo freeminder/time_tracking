@@ -1,18 +1,69 @@
+# frozen_string_literal: true
+
+# Stat service
 class StatService
-  def self.get_user_hours(user, opts = {})
-    user_reports = opts[:preloaded_data][:reports].select { |report| report.user_id == user.id }
+  attr_accessor :user, :opts
+
+  def initialize(user, opts = {})
+    @user = user
+    @opts = opts
+  end
+
+  def user_hours
     categories = {}
-    opts[:preloaded_data][:categories_all] = [opts[:preloaded_data][:single_category]] if opts[:preloaded_data][:single_category]
-    opts[:preloaded_data][:categories_all].each do |category|
-      hours = opts[:preloaded_data][:hours].select do |hour|
-        hour.category_id == category.id && user_reports.map { |report| report.id }.include?(hour.report_id)
-      end
-      # precise hours calculation by days from the first week
-      hffw = hours.select { |hour| hour.created_at.strftime("%U").to_i == opts[:preloaded_data][:date].strftime("%U").to_i }
-      fwhc = hffw.map { |hour| hour.week_attrs.to_a[opts[:preloaded_data][:date].wday,6].to_h.values.compact.sum }.sum
-      owhc = (hours - hffw).map { |hour| hour.week_attrs.values.compact.sum }.sum
-      categories.merge!(category.name => fwhc + owhc) # first week hours count + other weeks hours count
+
+    categories_all.each do |category|
+      @category = category
+      categories.merge!(
+        category.name => first_week_hours_count + other_weeks_hours_count
+      )
     end
-    { user_full_name: user.full_name, user_rate: user.rate, categories: categories }
+
+    {
+      user_full_name: user.full_name,
+      user_rate: user.rate,
+      categories: categories
+    }
+  end
+
+  private
+
+  def categories_all
+    if opts[:preloaded_data][:single_category]
+      [opts[:preloaded_data][:single_category]]
+    else
+      opts[:preloaded_data][:categories_all]
+    end
+  end
+
+  def user_reports
+    opts[:preloaded_data][:reports].select { |r| r.user_id == user.id }
+  end
+
+  def hours
+    opts[:preloaded_data][:hours].select do |h|
+      h.category_id == @category.id && \
+        user_reports.map(&:id).include?(h.report_id)
+    end
+  end
+
+  def hours_for_first_week
+    hours.select do |hour|
+      hour.created_at.strftime('%U').to_i == \
+        opts[:preloaded_data][:date].strftime('%U').to_i
+    end
+  end
+
+  def first_week_hours_count
+    hours_for_first_week.map do |hour|
+      hour.week_attrs.to_a[opts[:preloaded_data][:date].wday, 6].to_h
+          .values.compact.sum
+    end.sum
+  end
+
+  def other_weeks_hours_count
+    (hours - hours_for_first_week).map do |hour|
+      hour.week_attrs.values.compact.sum
+    end.sum
   end
 end

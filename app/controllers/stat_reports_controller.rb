@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# StatsReports controller
 class StatReportsController < ApplicationController
   before_filter :authorize_admin
   before_action :set_date
@@ -5,46 +8,62 @@ class StatReportsController < ApplicationController
 
   def user
     @user = User.find(params[:user_id])
-    @categories = StatService.get_user_hours(@user, preloaded_data: @preloaded_data)[:categories]
+    @categories = StatService.new(@user, preloaded_data: @preloaded_data)
+                             .user_hours[:categories]
   end
 
   def team
     @team = Team.find(params[:team_id])
-    @users = @team.users.map { |user| StatService.get_user_hours(user, preloaded_data: @preloaded_data) }
+    @users = @team.users.map do |user|
+      StatService.new(user, preloaded_data: @preloaded_data).user_hours
+    end
   end
 
   def category
     @category = Category.find(params[:category_id])
-    @users = User.all.map { |user| StatService.get_user_hours(user, preloaded_data: @preloaded_data.merge(single_category: @category)) }
+    @users = User.all.map do |user|
+      StatService.new(
+        user, preloaded_data: @preloaded_data.merge(single_category: @category)
+      ).user_hours
+    end
   end
 
   def all
-    @users = User.all.map { |user| StatService.get_user_hours(user, preloaded_data: @preloaded_data) }
+    @users = User.all.map do |user|
+      StatService.new(user, preloaded_data: @preloaded_data).user_hours
+    end
   end
-
 
   private
 
   def set_date
-    if params[:date_custom] != ""
-      @date = Time.strptime(params[:date_custom],"%m/%d/%Y")
-    elsif params[:date] == "last_week"
-      @date = 1.weeks.ago
-    elsif params[:date] == "last_month"
-      @date = 1.months.ago
-    elsif params[:date] == "last_year"
-      @date = 1.years.ago
-    else
-      @date = 1.seconds.ago
-    end
+    @date = (date_custom || date) || 1.seconds.ago
+  end
+
+  def date_custom
+    return unless params[:date_custom].present?
+
+    Time.strptime(params[:date_custom], '%m/%d/%Y')
+  end
+
+  def date
+    dates_hash = {
+      last_week: 1.weeks.ago,
+      last_month: 1.months.ago,
+      last_year: 1.years.ago
+    }
+
+    return unless params[:date].present?
+
+    dates_hash.find { |k, _| k == params[:date].to_sym }.last
   end
 
   def set_preload
     @preloaded_data = {
       categories_all: Category.all,
-      reports: Report.where("created_at >= :created_at", created_at: @date),
-      hours: Hour.where("created_at >= :created_at", created_at: @date),
-      date: @date,
+      reports: Report.where('created_at >= :created_at', created_at: @date),
+      hours: Hour.where('created_at >= :created_at', created_at: @date),
+      date: @date
     }
   end
 end

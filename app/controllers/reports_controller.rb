@@ -1,116 +1,118 @@
+# frozen_string_literal: true
+
+# Reports controller
 class ReportsController < ApplicationController
-  # %U - Week number of the year. The week starts with Sunday. (00..53)
-  # %W - Week number of the year. The week starts with Monday. (00..53)
-  @@current_week = Date.today.strftime("%U").to_i
-  before_action :set_report, only: [:show, :update, :destroy, :sign, :export]
+  before_action :set_report, only: %i[show update destroy sign export]
 
   def index
-    path = current_user.reports.any? ? report_path(current_user.reports.last) : new_report_path
+    cr = current_user.reports
+    path = cr.any? ? report_path(cr.last) : new_report_path
     redirect_to path
   end
 
   def new
-    @report = Report.new(created_at: Time.now, week_id: @@current_week)
+    @report = Report.new(created_at: Time.now, week_id: current_week)
     @report.categories = Category.all
-    @report.categories.build
-    @total_hours = Date::DAYNAMES.map {|weekday| [weekday.downcase, 0]}.to_h
+    @total_hours = Date::DAYNAMES.map { |weekday| [weekday.downcase, 0] }.to_h
 
-    set_week_begin_and_end(true)
-    set_nav(true)
+    week_begin_and_end(true)
+    @previous = current_user.reports.last
   end
 
   def show
-    @hours = @report.hours.order("categories.name").joins(:category).select("hours.*, categories.name as category_name")
-    @total_hours = Date::DAYNAMES.map {|weekday| [weekday.downcase, 0]}.to_h
+    @hours = @report.hours
+                    .joins(:category)
+                    .select('hours.*, categories.name as category_name')
+    @total_hours = Date::DAYNAMES.map { |weekday| [weekday.downcase, 0] }.to_h
 
-    set_nav
-    set_week_begin_and_end
+    @previous = current_user.reports.where(['id < ?', @report.id]).last
+    @next     = current_user.reports.where(['id > ?', @report.id]).first
+    week_begin_and_end
 
-    render "locked" if @report.timesheet_locked
+    render 'locked' if @report.timesheet_locked
   end
 
   def search
-    if params[:date_custom] != ""
+    if params[:date_custom] != ''
       reports = ReportService.search(current_user, params)
       if reports.any?
         redirect_to report_path(reports.first)
       else
-        flash[:alert] = "No reports have been found for a specific period!"
-        redirect_to :back
+        message = 'No reports have been found for a specified period!'
+        redirect_to :back, alert: message
       end
     else
-      flash[:alert] = "No input data has been received!"
-      redirect_to :back
+      redirect_to :back, alert: 'No input data has been received!'
     end
   end
 
   def create
-    @report = current_user.reports.build(report_params.merge(week_id: @@current_week))
+    cw = current_week
+    @report = current_user.reports.build(report_params.merge(week_id: cw))
     if @report.save
-      redirect_to report_path(@report), notice: "Report has been successfully created!"
+      message = 'Report has been successfully created!'
+      redirect_to report_path(@report), notice: message
     else
-      render "new"
+      render 'new'
     end
   end
 
   def update
     if @report.update_attributes(report_params)
       @report.update_attributes(signed: true) if @report.signed == false
-      if params[:commit] == "Export"
-        set_week_begin_and_end
-        render xlsx: "export", template: "exports/timesheet.xlsx.axlsx"
+      if params[:commit] == 'Export'
+        week_begin_and_end
+        render xlsx: 'export', template: 'exports/timesheet.xlsx.axlsx'
       else
-        redirect_to report_path(@report), notice: "Report has been successfully updated!"
+        message = 'Report has been successfully updated!'
+        redirect_to report_path(@report), notice: message
       end
     else
-      render action: "show"
+      render action: 'show'
     end
   end
 
   def sign
     if @report.update_attributes(signed: true)
-      redirect_to report_path(@report), notice: "Report has been successfully signed!"
+      message = 'Report has been successfully signed!'
+      redirect_to report_path(@report), notice: message
     else
-      render action: "show"
+      render action: 'show'
     end
   end
 
   def export
-    set_week_begin_and_end
-    render xlsx: "export", template: "exports/timesheet"
+    week_begin_and_end
+    render xlsx: 'export', template: 'exports/timesheet'
   end
-
 
   private
 
   def report_params
-    params.require(:report).permit(:id, :user_id, :week_id, hours_attributes:[:id, :category_id, :sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday])
+    params.require(:report)
+          .permit(:id, :user_id, :week_id, hours_attributes:
+            %i[id category_id sunday monday tuesday wednesday
+               thursday friday saturday])
   end
 
   def set_report
     @report = Report.find(params[:id])
-    unless @report.user == current_user || current_user.admin
-      flash[:alert] = "Access denied!"
-      redirect_to reports_path
-    end
+    return if @report.user == current_user || current_user.admin
+
+    flash[:alert] = 'Access denied!'
+    redirect_to reports_path
   end
 
-  def set_week_begin_and_end(today = nil)
-    if today
-      @week_begin = Date.today.beginning_of_week(start_day = :sunday).strftime("%m/%d/%Y")
-      @week_end   = Date.today.end_of_week(start_day = :sunday).strftime("%m/%d/%Y")
-    else
-      @week_begin = Date.commercial(@report.created_at.strftime("%Y").to_i, @report.week_id, 7).strftime("%m/%d/%Y")
-      @week_end = Date.commercial(@report.created_at.strftime("%Y").to_i, @report.week_id+1, 6).strftime("%m/%d/%Y")
-    end
+  def week_begin_and_end(today = nil)
+    that = @report.created_at
+    d = today ? Date.today : Date.new(that.year, that.month, that.day)
+    @week_begin = d.beginning_of_week(:sunday).strftime('%m/%d/%Y')
+    @week_end   = d.end_of_week(:sunday).strftime('%m/%d/%Y')
   end
 
-  def set_nav(search_by_week = nil)
-    if search_by_week
-      @previous = Report.where(["user_id = ? AND week_id < ?", current_user.id, @@current_week]).last
-    else
-      @previous = Report.where(["user_id = ? AND id < ?", current_user.id, @report.id]).last
-      @next     = Report.where(["user_id = ? AND id > ?", current_user.id, @report.id]).first
-    end
+  def current_week
+    # %U - Week number of the year. The week starts with Sunday. (00..53)
+    # %W - Week number of the year. The week starts with Monday. (00..53)
+    Date.today.strftime('%U').to_i
   end
 end

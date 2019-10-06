@@ -32,7 +32,7 @@
     var daysTotalCell;
 
     var updateTotal = function () {
-      var rows = "#{Category.count}";
+      var rows = "#{@report.categories.length}";
       var i, j;
 
       var totalHours = 0;

@@ -1,8 +1,10 @@
-= f.simple_fields_for :hours do |ff|
+= f.simple_fields_for :hours, @hours do |ff|
   - @weekday_hours = Date::DAYNAMES.map {|weekday| [weekday.downcase, 0]}.to_h
   - hour = ff.object
   %tr
-    %td.tg-030e= hour.category.name
+    %td.tg-030e
+      = hour.category.name if action_name == "new"
+      = hour.category_name if action_name == "show"
     %td.tg-030e
     - @weekday_hours.keys.each do |weekday|
       %td.tg-030e= ff.input weekday.to_sym, as: :integer, label: false, input_html: { min: "0", max: "12", step: "any", id: "shares_#{weekday[0..2]}#{ff.index}" }

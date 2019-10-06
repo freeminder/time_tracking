@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
+# Exports controller
 class ExportsController < ApplicationController
-  before_filter :authorize_admin, only: [:stat]
+  before_filter :authorize_admin, only: :stat
 
   def stat
-    render xlsx: "#{params[:export][:type].capitalize}Report", template: "exports/#{params[:export][:type]}"
+    render xlsx: "#{params[:export][:type].capitalize}Report",
+           template: "exports/#{params[:export][:type]}.xlsx.axlsx"
   end
 end

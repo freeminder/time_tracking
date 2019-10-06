@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
+# Teams controller
 class TeamsController < ApplicationController
   before_filter :authorize_admin
-  before_action :set_team, only: [:show, :edit, :update, :destroy]
+  before_action :set_team, only: %i[show edit update destroy]
 
   def index
     @teams = Team.all
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @team = Team.new
@@ -16,31 +18,29 @@ class TeamsController < ApplicationController
   def create
     @team = Team.new(team_params)
     if @team.save
-      redirect_to @team, notice: "Team has been successfully created!"
+      redirect_to @team, notice: 'Team has been successfully created!'
     else
-      render "new"
+      render 'new'
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @team.update_attributes(team_params)
-      redirect_to :back, notice: "Team has been successfully updated!"
+      redirect_to :back, notice: 'Team has been successfully updated!'
     else
-      render action: "edit"
+      render action: 'edit'
     end
   end
 
   def destroy
     if @team.destroy
-      redirect_to teams_path, notice: "Team has been successfully deleted!"
+      redirect_to teams_path, notice: 'Team has been successfully deleted!'
     else
-      render action: "edit"
+      render action: 'edit'
     end
   end
-
 
   private
 

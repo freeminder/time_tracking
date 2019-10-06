@@ -1,31 +1,31 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe Category, :type => :model do
+require 'rails_helper'
+
+RSpec.describe Category, type: :model do
   attrs = { name: Faker::Book.genre }
 
-  subject {
-    described_class.new(attrs)
-  }
+  subject { described_class.new(attrs) }
 
-  describe "Validations" do
-    it "is valid with valid attributes" do
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
       expect(subject).to be_valid
     end
 
-    it "is not valid without attributes" do
+    it 'is not valid without attributes' do
       expect(described_class.new).to_not be_valid
     end
 
-    it "is not valid without a name" do
+    it 'is not valid without a name' do
       subject.name = nil
       expect(subject).to_not be_valid
     end
   end
 
-  describe "Associations" do
+  describe 'Associations' do
     it { should have_many(:hours) }
 
-    it "hour belongs to the current category" do
+    it 'hour belongs to the current category' do
       category = create(:category)
       report = create(:report)
       hour = create(:hour, category: category, report: report)

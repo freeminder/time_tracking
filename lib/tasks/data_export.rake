@@ -1,24 +1,28 @@
-namespace :dataexport do
-  desc 'export data to the dump'
-  task :recent_data => :environment do
-    puts "Exporting data"
+# frozen_string_literal: true
 
-    filepath = File.join(Rails.root, 'db', 'recent_data.json')
+namespace :data do
+  desc 'export data to the dump'
+  task export: :environment do
+    puts 'Exporting data'
+
+    filepath = File.join(Rails.root, 'db', 'data.json')
     puts "=> exporting data into #{filepath}"
 
     data = {
       teams: Team.all,
-      users: User.all,
+      users: User.all.map do |u|
+        u.as_json.merge(encrypted_password: u.encrypted_password)
+      end,
       categories: Category.all,
       reports: Report.all,
-      hours: Hour.all,
+      hours: Hour.all
     }.as_json
 
-    File.open(filepath, 'w') do |f|
-      f.write(JSON.pretty_generate(data))
-    end
+    File.open(filepath, 'w') { |f| f.write(JSON.pretty_generate(data)) }
 
-    puts data.map { |object| "= exported #{object.last.map { |el| el.length }.length } #{object.first}" }
-    puts "=> export completed"
+    data.each do |object|
+      puts "= exported #{object.last.map(&:length).length} #{object.first}"
+    end
+    puts '=> export completed'
   end
 end

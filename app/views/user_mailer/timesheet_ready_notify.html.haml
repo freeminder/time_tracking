@@ -1,0 +1,8 @@
+!!!
+%html
+  %head
+    %meta{:content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'}/
+  %body
+    %h3= "Dear #{@user.full_name},"
+    %p= "Thank you for finishing the report at #{report_url(@report)}."
+    %p Have a great day!

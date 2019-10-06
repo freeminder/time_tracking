@@ -9,4 +9,3 @@ create_new_timesheets_job:
 timesheet_not_ready_notification_job:
   cron: '0 16 * * *'
   class: 'TimesheetNotReadyNotificationWorker'
-  # queue: mailers
