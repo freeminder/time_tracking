@@ -39,10 +39,10 @@ class ReportsController < ApplicationController
         redirect_to report_path(reports.first)
       else
         message = 'No reports have been found for a specified period!'
-        redirect_to :back, alert: message
+        redirect_back fallback_location: reports_path, alert: message
       end
     else
-      redirect_to :back, alert: 'No input data has been received!'
+      redirect_back fallback_location: reports_path, alert: 'No input data has been received!'
     end
   end
 
@@ -58,8 +58,8 @@ class ReportsController < ApplicationController
   end
 
   def update
-    if @report.update_attributes(report_params)
-      @report.update_attributes(signed: true) if @report.signed == false
+    if @report.update(report_params)
+      @report.update(signed: true) if @report.signed == false
       if params[:commit] == 'Export'
         week_begin_and_end
         render xlsx: 'export', template: 'exports/timesheet.xlsx.axlsx'
@@ -73,7 +73,7 @@ class ReportsController < ApplicationController
   end
 
   def sign
-    if @report.update_attributes(signed: true)
+    if @report.update(signed: true)
       message = 'Report has been successfully signed!'
       redirect_to report_path(@report), notice: message
     else

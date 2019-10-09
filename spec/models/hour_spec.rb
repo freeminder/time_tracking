@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Hour, type: :model do
   attrs = {}
   Date::DAYNAMES.map do |dayname|
-    attrs.merge!(dayname.downcase.to_sym => Faker::Number.number(1))
+    attrs.merge!(dayname.downcase.to_sym => Faker::Number.number(digits: 1))
   end
 
   subject { described_class.new(attrs) }

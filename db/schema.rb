@@ -1,76 +1,94 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506164536) do
+ActiveRecord::Schema.define(version: 2019_10_09_181150) do
 
-  create_table "categories", force: :cascade do |t|
-    t.string "name", limit: 255
+  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "hours", force: :cascade do |t|
-    t.integer  "sunday",      limit: 4
-    t.integer  "monday",      limit: 4
-    t.integer  "tuesday",     limit: 4
-    t.integer  "wednesday",   limit: 4
-    t.integer  "thursday",    limit: 4
-    t.integer  "friday",      limit: 4
-    t.integer  "saturday",    limit: 4
+  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "hours", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.integer "sunday"
+    t.integer "monday"
+    t.integer "tuesday"
+    t.integer "wednesday"
+    t.integer "thursday"
+    t.integer "friday"
+    t.integer "saturday"
     t.datetime "created_at"
-    t.integer  "report_id",   limit: 4
-    t.integer  "category_id", limit: 4
+    t.integer "report_id"
+    t.integer "category_id"
+    t.index ["category_id"], name: "index_hours_on_category_id"
+    t.index ["report_id"], name: "index_hours_on_report_id"
   end
 
-  add_index "hours", ["category_id"], name: "index_hours_on_category_id", using: :btree
-  add_index "hours", ["report_id"], name: "index_hours_on_report_id", using: :btree
-
-  create_table "reports", force: :cascade do |t|
-    t.integer  "week_id",          limit: 4
-    t.boolean  "signed",                     default: false
-    t.boolean  "timesheet_locked",           default: false
+  create_table "reports", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.integer "week_id"
+    t.boolean "signed", default: false
+    t.boolean "timesheet_locked", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id",          limit: 4
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
-  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
-
-  create_table "teams", force: :cascade do |t|
-    t.string "name", limit: 255
+  create_table "teams", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.string "name"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.boolean  "admin",                              default: false
-    t.string   "email",                  limit: 255, default: "",    null: false
-    t.string   "encrypted_password",     limit: 255, default: "",    null: false
-    t.string   "reset_password_token",   limit: 255
+  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.boolean "admin", default: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,     null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.string   "job_title",              limit: 255
-    t.integer  "rate",                   limit: 4,   default: 0
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "job_title"
+    t.integer "rate", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "team_id",                limit: 4
+    t.integer "team_id"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["team_id"], name: "index_users_on_team_id"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["team_id"], name: "index_users_on_team_id", using: :btree
-
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
 end

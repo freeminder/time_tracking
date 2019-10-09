@@ -2,7 +2,7 @@
 
 # Users controller
 class UsersController < ApplicationController
-  before_filter :authorize_admin, except: :show
+  before_action :authorize_admin, except: :show
   before_action :set_user, only: %i[edit update destroy]
 
   def index
@@ -37,8 +37,8 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update_attributes(user_params)
-      redirect_to :back, notice: 'User has been successfully updated!'
+    if @user.update(user_params)
+      redirect_back fallback_location: users_path, notice: 'User has been successfully updated!'
     else
       render action: 'edit'
     end

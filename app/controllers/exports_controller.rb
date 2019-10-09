@@ -2,7 +2,7 @@
 
 # Exports controller
 class ExportsController < ApplicationController
-  before_filter :authorize_admin, only: :stat
+  before_action :authorize_admin, only: :stat
 
   def stat
     render xlsx: "#{params[:export][:type].capitalize}Report",

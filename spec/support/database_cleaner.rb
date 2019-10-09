@@ -1,4 +1,3 @@
 # frozen_string_literal: true
 
-DatabaseCleaner.strategy = :truncation
-DatabaseCleaner.clean
+DatabaseCleaner.clean_with :truncation, except: %w[ar_internal_metadata]

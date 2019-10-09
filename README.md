@@ -2,7 +2,7 @@
 Time tracking web application.
 
 ## Requirements
-* **Ruby >= 2.3.0**
+* **Ruby >= 2.5.0**
 * **Bundler**
 * **MySQL server**
 * **Redis server**

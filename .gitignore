@@ -8,5 +8,4 @@
 /public/assets/
 
 /.env
-/config/secrets.yml
 /db/data.json

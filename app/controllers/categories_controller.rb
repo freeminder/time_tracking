@@ -2,7 +2,7 @@
 
 # Categories controller
 class CategoriesController < ApplicationController
-  before_filter :authorize_admin
+  before_action :authorize_admin
   before_action :set_category, only: %i[show edit update destroy]
 
   def index
@@ -29,9 +29,9 @@ class CategoriesController < ApplicationController
   def edit; end
 
   def update
-    if @category.update_attributes(category_params)
+    if @category.update(category_params)
       message = 'Category has been successfully updated!'
-      redirect_to :back, notice: message
+      redirect_back fallback_location: categories_path, notice: message
     else
       render action: 'edit'
     end

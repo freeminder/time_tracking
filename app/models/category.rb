@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 # Category model
-class Category < ActiveRecord::Base
+class Category < ApplicationRecord
   has_many :hours
   has_many :reports, through: :hours
 
   validates :name, presence: true
-  validates :name, uniqueness: true, on: :create
+  validates :name, uniqueness: { case_sensitive: false }, on: :create
 
   before_destroy :remove_hours_later, prepend: true
 

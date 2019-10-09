@@ -1,27 +1,23 @@
-ruby '2.3.0'
+ruby '2.6.5'
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.11.1'
+gem 'rails', '6.0.0'
+gem 'bootsnap', require: false
+gem 'puma'
 gem 'mysql2'
-gem 'devise', '~> 3.5'
-gem 'bcrypt', '~> 3.1.7'
+gem 'devise'
 gem 'email_address'
 gem 'haml'
 gem 'simple_form'
-gem 'bootstrap-sass', '~> 3.3.4'
-gem 'sass-rails', '>= 3.2'
-gem 'font-awesome-sass'
-gem 'momentjs-rails', '~> 2.9'
+gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'uglifier', '>= 1.3.0'
 gem 'axlsx_rails'
 gem 'sidekiq'
 gem 'sidekiq-cron', '~> 1.1'
 
 group :development, :test do
   gem 'byebug'
-  gem 'spring', '>= 1.3.6'
   gem 'dotenv-rails'
   gem 'awesome_print'
   gem 'rspec-rails'
@@ -30,4 +26,10 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'faker'
   gem 'rubocop', require: false
+end
+
+group :development do
+  gem 'listen'
+  gem 'spring'
+  gem 'spring-watcher-listen'
 end

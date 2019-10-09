@@ -2,7 +2,7 @@
 
 # Teams controller
 class TeamsController < ApplicationController
-  before_filter :authorize_admin
+  before_action :authorize_admin
   before_action :set_team, only: %i[show edit update destroy]
 
   def index
@@ -27,8 +27,8 @@ class TeamsController < ApplicationController
   def edit; end
 
   def update
-    if @team.update_attributes(team_params)
-      redirect_to :back, notice: 'Team has been successfully updated!'
+    if @team.update(team_params)
+      redirect_back fallback_location: teams_path, notice: 'Team has been successfully updated!'
     else
       render action: 'edit'
     end

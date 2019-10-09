@@ -3,9 +3,9 @@
 # Application base controller
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  skip_before_filter :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
   before_action :authenticate_user!
-  before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def not_found
     render file: "#{Rails.root}/public/404.html", status: :not_found
@@ -18,18 +18,10 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) do |u|
-      u.permit(:email, :password, :password_confirmation, :remember_me)
-    end
-    devise_parameter_sanitizer.for(:sign_in) do |u|
-      u.permit(:email, :password, :remember_me)
-    end
-    devise_parameter_sanitizer.for(:sign_out) do |u|
-      u.permit(:email, :password, :remember_me)
-    end
-    devise_parameter_sanitizer.for(:account_update) do |u|
-      u.permit(:email, :password, :password_confirmation, :current_password)
-    end
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password password_confirmation first_name last_name rate])
+    devise_parameter_sanitizer.permit(:sign_in, keys: %i[email password remember_me])
+    devise_parameter_sanitizer.permit(:sign_out, keys: %i[email password])
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[email password password_confirmation current_password])
   end
 
   private

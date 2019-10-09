@@ -10,7 +10,7 @@ RSpec.describe User, type: :model do
 
   attrs = {
     email: "#{Faker::Name.first_name}.#{Faker::Name.last_name}@myexample.com",
-    password: Faker::Internet.password(8, 128),
+    password: Faker::Internet.password(min_length: 8, max_length: 128),
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name
   }
@@ -65,18 +65,18 @@ RSpec.describe User, type: :model do
     end
 
     it 'is not valid with a password shorter than 8 characters' do
-      subject.password = Faker::Internet.password(1, 7)
+      subject.password = Faker::Internet.password(max_length: 7)
       expect(subject).to_not be_valid
     end
 
     it 'is not valid with a password longer than 128 characters' do
-      subject.password = Faker::Internet.password(129, 200)
+      subject.password = Faker::Internet.password(min_length: 129)
       expect(subject).to_not be_valid
     end
   end
 
   describe 'Associations' do
-    it { should belong_to(:team) }
+    it { should belong_to(:team).optional }
     it { should have_many(:reports) }
     it { should have_many(:hours) }
 

@@ -2,7 +2,7 @@
 
 # StatsReports controller
 class StatReportsController < ApplicationController
-  before_filter :authorize_admin
+  before_action :authorize_admin
   before_action :set_date
   before_action :set_preload, except: [:set_date]
 
