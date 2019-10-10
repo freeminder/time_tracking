@@ -12,7 +12,7 @@ Clone `.env.example` to `.env` and update the environment variables with your lo
 Then run:
 ```
 bundle
-rake db:setup
+rails db:setup
 ```
 This will run database creation, migration and seeds.
 
@@ -29,7 +29,7 @@ rspec -fd
 ```
 Test every model method. Test every scenarios with feature tests. Double test any admin functionality to be sure that only admin can do that. Use this [article](https://robots.thoughtbot.com/how-we-test-rails-applications) and [this rsource](http://www.betterspecs.org/) as best practice.
 
-__FactoryBot__
+##### FactoryBot
 Create factory for all models in `spec/factories` folder.
 Usefull [cheatsheet](https://devhints.io/factory_bot).
 
