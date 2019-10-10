@@ -5,7 +5,7 @@ namespace :data do
   task export: :environment do
     puts 'Exporting data'
 
-    filepath = File.join(Rails.root, 'db', 'data.json')
+    filepath = Rails.root.join('db', 'data.json')
     puts "=> exporting data into #{filepath}"
 
     data = {

@@ -2,7 +2,7 @@
 
 # Reports controller
 class ReportsController < ApplicationController
-  before_action :set_report, only: %i[show update destroy sign export]
+  before_action :set_report, only: %i[show update sign export]
 
   def index
     cr = current_user.reports
@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
   end
 
   def new
-    @report = Report.new(created_at: Time.now, week_id: current_week)
+    @report = Report.new(created_at: Time.zone.now, week_id: current_week)
     @report.categories = Category.all
     @total_hours = Date::DAYNAMES.map { |weekday| [weekday.downcase, 0] }.to_h
 
@@ -105,7 +105,7 @@ class ReportsController < ApplicationController
 
   def week_begin_and_end(today = nil)
     that = @report.created_at
-    d = today ? Date.today : Date.new(that.year, that.month, that.day)
+    d = today ? Time.zone.today : Date.new(that.year, that.month, that.day)
     @week_begin = d.beginning_of_week(:sunday).strftime('%m/%d/%Y')
     @week_end   = d.end_of_week(:sunday).strftime('%m/%d/%Y')
   end
@@ -113,6 +113,6 @@ class ReportsController < ApplicationController
   def current_week
     # %U - Week number of the year. The week starts with Sunday. (00..53)
     # %W - Week number of the year. The week starts with Monday. (00..53)
-    Date.today.strftime('%U').to_i
+    Time.zone.today.strftime('%U').to_i
   end
 end

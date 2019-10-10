@@ -37,23 +37,23 @@ class StatReportsController < ApplicationController
   private
 
   def set_date
-    @date = (date_custom || date) || 1.seconds.ago
+    @date = (date_custom || date) || 1.second.ago
   end
 
   def date_custom
-    return unless params[:date_custom].present?
+    return if params[:date_custom].blank?
 
     Time.strptime(params[:date_custom], '%m/%d/%Y')
   end
 
   def date
     dates_hash = {
-      last_week: 1.weeks.ago,
-      last_month: 1.months.ago,
-      last_year: 1.years.ago
+      last_week: 1.week.ago,
+      last_month: 1.month.ago,
+      last_year: 1.year.ago
     }
 
-    return unless params[:date].present?
+    return if params[:date].blank?
 
     dates_hash.find { |k, _| k == params[:date].to_sym }.last
   end

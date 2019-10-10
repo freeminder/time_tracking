@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   def not_found
-    render file: "#{Rails.root}/public/404.html", status: :not_found
+    render file: Rails.root.join('public', '404.html'), status: :not_found
   end
 
   def authorize_admin

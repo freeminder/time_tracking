@@ -5,7 +5,7 @@ class CreateNewTimesheetsWorker
   include Sidekiq::Worker
 
   def perform(user_id = nil)
-    current_week = Date.today.strftime('%U').to_i
+    current_week = Time.zone.today.strftime('%U').to_i
     users = user_id ? [User.find(user_id)] : User.all
 
     users.each do |user|

@@ -5,7 +5,7 @@ class LockTimesheetsWorker
   include Sidekiq::Worker
 
   def perform
-    current_week = Date.today.strftime('%U').to_i
+    current_week = Time.zone.today.strftime('%U').to_i
     reports = Report.where(timesheet_locked: false)
                     .where.not(week_id: current_week)
 
