@@ -15,7 +15,7 @@ Metrics/MethodLength:
 AllCops:
   Exclude:
     - Gemfile
-    - config/routes.rb
+    - config/**/*
     - db/**/*
     - bin/**/*
     - node_modules/**/*

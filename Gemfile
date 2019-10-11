@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '6.0.0'
 gem 'bootsnap', require: false
+gem 'rollbar'
 gem 'puma'
 gem 'mysql2'
 gem 'devise'
