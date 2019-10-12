@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+  db:
+    container_name: time_tracking_db
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    expose:
+      - 3306
+    restart: always
+
+  redis:
+    container_name: time_tracking_redis
+    image: 'redis:5.0-alpine'
+    command: redis-server
+    expose:
+      - 6379
+    restart: always
+
+  web:
+    container_name: time_tracking_web
+    tty: true
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      DB_NAME: time_tracking_development
+      DB_USERNAME: root
+      DB_PASSWORD: example
+      DB_HOSTNAME: db
+      DB_PORT: 3306
+      REDIS_URL: "redis:6379/0"
+    command: foreman start
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+      - redis
+    restart: always

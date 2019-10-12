@@ -28,6 +28,7 @@ group :development, :test do
   gem 'faker'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
+  gem 'foreman', require: false
 end
 
 group :development do

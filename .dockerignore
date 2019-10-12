@@ -1,0 +1,5 @@
+.git
+.dockerignore
+.env.example
+log/*
+tmp/*
