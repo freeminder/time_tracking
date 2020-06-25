@@ -13,7 +13,7 @@ gem 'simple_form'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'axlsx_rails'
+gem 'caxlsx_rails'
 gem 'sidekiq'
 gem 'sidekiq-cron', '~> 1.1'
 
