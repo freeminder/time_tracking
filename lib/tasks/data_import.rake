@@ -5,7 +5,7 @@ namespace :data do
   task import: :environment do
     puts 'Importing data'
 
-    filepath = Rails.root.join('db', 'data.json')
+    filepath = Rails.root.join('db/data.json')
     abort "Input file not found: #{filepath}" unless File.exist?(filepath)
     puts "=> importing data from #{filepath}"
 

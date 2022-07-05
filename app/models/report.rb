@@ -7,5 +7,7 @@ class Report < ApplicationRecord
   accepts_nested_attributes_for :hours
   has_many :categories, through: :hours
 
+  # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
   validates :user, presence: true, on: %i[create update]
+  # rubocop:enable Rails/RedundantPresenceValidationOnBelongsTo
 end

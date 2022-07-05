@@ -13,7 +13,7 @@ class ReportsController < ApplicationController
   def new
     @report = Report.new(created_at: Time.zone.now, week_id: current_week)
     @report.categories = Category.all
-    @total_hours = Date::DAYNAMES.map { |weekday| [weekday.downcase, 0] }.to_h
+    @total_hours = Date::DAYNAMES.to_h { |weekday| [weekday.downcase, 0] }
 
     week_begin_and_end(true)
     @previous = current_user.reports.last
@@ -23,7 +23,7 @@ class ReportsController < ApplicationController
     @hours = @report.hours
                     .joins(:category)
                     .select('hours.*, categories.name as category_name')
-    @total_hours = Date::DAYNAMES.map { |weekday| [weekday.downcase, 0] }.to_h
+    @total_hours = Date::DAYNAMES.to_h { |weekday| [weekday.downcase, 0] }
 
     @previous = current_user.reports.where(['id < ?', @report.id]).last
     @next     = current_user.reports.where(['id > ?', @report.id]).first

@@ -5,7 +5,7 @@ namespace :data do
   task export: :environment do
     puts 'Exporting data'
 
-    filepath = Rails.root.join('db', 'data.json')
+    filepath = Rails.root.join('db/data.json')
     puts "=> exporting data into #{filepath}"
 
     data = {
@@ -18,7 +18,7 @@ namespace :data do
       hours: Hour.all
     }.as_json
 
-    File.open(filepath, 'w') { |f| f.write(JSON.pretty_generate(data)) }
+    File.write(filepath, JSON.pretty_generate(data))
 
     data.each do |object|
       puts "= exported #{object.last.map(&:length).length} #{object.first}"

@@ -7,7 +7,7 @@ class UserMailer < ApplicationMailer
     @report = report
 
     mail(
-      from: ENV['EMAIL_FROM'],
+      from: ENV.fetch('EMAIL_FROM', nil),
       to: user.email,
       subject: 'You have a finished report!'
     )
@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
     @report = report
 
     mail(
-      from: ENV['EMAIL_FROM'],
+      from: ENV.fetch('EMAIL_FROM', nil),
       to: user.email,
       subject: 'You have an unfinished report!'
     )
