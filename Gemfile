@@ -1,7 +1,7 @@
 ruby '2.6.5'
 source 'https://rubygems.org'
 
-gem 'rails', '6.0.3.2'
+gem 'rails', '6.1.6'
 gem 'bootsnap', require: false
 gem 'rollbar'
 gem 'puma'

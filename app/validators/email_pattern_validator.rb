@@ -5,7 +5,7 @@ class EmailPatternValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if self.class.valid_value?(value)
 
-    record.errors[attribute] << 'is invalid'
+    record.errors.add(attribute.to_sym, message: 'is invalid')
   end
 
   def self.valid_value?(email)

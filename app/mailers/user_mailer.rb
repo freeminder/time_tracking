@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # User mailer
-class UserMailer < ActionMailer::Base
+class UserMailer < ApplicationMailer
   def timesheet_ready_notify(user, report)
     @user = user
     @report = report

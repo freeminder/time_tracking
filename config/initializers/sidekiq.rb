@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Sidekiq.default_worker_options = { backtrace: 20, retry: false }
+Sidekiq.default_job_options = { backtrace: 20, retry: false }
 
 Sidekiq.configure_server do |config|
   config.redis = { url: "redis://#{ENV['REDIS_URL']}" }
