@@ -6,6 +6,6 @@ class ExportsController < ApplicationController
 
   def stat
     render xlsx: "#{params[:export][:type].capitalize}Report",
-           template: "exports/#{params[:export][:type]}.xlsx.axlsx"
+           template: "exports/#{params[:export][:type]}"
   end
 end

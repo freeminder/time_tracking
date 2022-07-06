@@ -62,7 +62,7 @@ class ReportsController < ApplicationController
       @report.update(signed: true) if @report.signed == false
       if params[:commit] == 'Export'
         week_begin_and_end
-        render xlsx: 'export', template: 'exports/timesheet.xlsx.axlsx'
+        render xlsx: 'export', template: 'exports/timesheet'
       else
         message = 'Report has been successfully updated!'
         redirect_to report_path(@report), notice: message
