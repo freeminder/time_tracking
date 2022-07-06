@@ -1,7 +1,7 @@
-ruby '2.6.5'
+ruby '2.7.2'
 source 'https://rubygems.org'
 
-gem 'rails', '6.1.6'
+gem 'rails', '7.0.3'
 gem 'bootsnap', require: false
 gem 'rollbar'
 gem 'puma'
@@ -10,12 +10,14 @@ gem 'devise'
 gem 'email_address'
 gem 'haml'
 gem 'simple_form'
+gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'caxlsx_rails'
 gem 'sidekiq'
-gem 'sidekiq-cron', '~> 1.1'
+gem 'sidekiq-cron'
+gem 'net-http'
 
 group :development, :test do
   gem 'byebug'
